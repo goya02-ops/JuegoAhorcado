@@ -2,6 +2,16 @@
 
 Repo universitario: ATDD del Ahorcado en TypeScript. Antes de tocar código, leer **`GUIA-ATDD-IA-Ahorcado.md`** — contiene el proceso, arquitectura y reglas del ejercicio.
 
+## CI (GitHub Actions)
+
+El workflow `.github/workflows/ci.yml` corre en `ubuntu-latest` con Node 24 y **npm** (no pnpm). Pasos:
+1. `npm ci` — instala desde `package-lock.json`
+2. `npm run build` — compila con Vite
+3. `npm test` — Vitest (unit tests)
+4. `npx playwright install chromium --with-deps` — navegador para ATs
+5. `npm run at` — Playwright (acceptance tests)
+6. Upload de `test-results/` y `playwright-report/` como artifact
+
 ## Stack
 
 | Herramienta | Uso |
