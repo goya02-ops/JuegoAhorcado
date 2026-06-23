@@ -35,4 +35,24 @@ describe("Ahorcado", () => {
     juego.adivinar("A");
     expect(juego.palabraEnmascarada()).toBe("A _ A");
   });
+
+  it("descuenta una vida al fallar", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    expect(juego.vidas()).toBe(5);
+  });
+
+  it("la palabra no cambia al fallar", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+
+  it("fallo y acierto combinados", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("A");
+    expect(juego.vidas()).toBe(5);
+    expect(juego.palabraEnmascarada()).toBe("_ A _ _");
+  });
 });
