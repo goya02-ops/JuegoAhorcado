@@ -16,7 +16,11 @@ export class Ahorcado {
 
   adivinar(letra: string): void {
     const letraUpper = letra.toUpperCase();
-    this.letrasAcertadas.add(letraUpper);
+    if (this.palabra.includes(letraUpper)) {
+      this.letrasAcertadas.add(letraUpper);
+    } else {
+      this.vidasRestantes--;
+    }
   }
 
   vidas(): number {
