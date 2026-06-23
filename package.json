@@ -1,0 +1,21 @@
+{
+  "name": "agiles-22-6-26",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest",
+    "at": "bddgen && playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.20.0",
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "playwright-bdd": "^9.2.0",
+    "vitest": "^4.1.9"
+  }
+}
