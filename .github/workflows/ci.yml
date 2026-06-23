@@ -24,14 +24,25 @@ jobs:
       - run: npm run build
         name: Compilar (Vite)
 
-      - run: npm test
-        name: Tests unitarios (Vitest)
+      - run: npm test -- --coverage
+        name: Tests unitarios con cobertura (Vitest)
 
       - run: npx playwright install chromium --with-deps
         name: Instalar navegadores Playwright
 
       - run: npm run at
         name: Tests de aceptación (Playwright)
+
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=goya02-ops_agiles-22-6-26
+            -Dsonar.organization=goya02-ops
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
       - uses: actions/upload-artifact@v6
         if: always()
