@@ -10,7 +10,7 @@ export default defineConfig({
   testDir,
   use: { baseURL: "http://localhost:5173" },
   webServer: {
-    command: "pnpm dev",
+    command: "npx vite",
     url: "http://localhost:5173",
     reuseExistingServer: !process.env.CI,
   },
