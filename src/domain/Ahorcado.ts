@@ -14,6 +14,11 @@ export class Ahorcado {
       .join(" ");
   }
 
+  adivinar(letra: string): void {
+    const letraUpper = letra.toUpperCase();
+    this.letrasAcertadas.add(letraUpper);
+  }
+
   vidas(): number {
     return this.vidasRestantes;
   }
