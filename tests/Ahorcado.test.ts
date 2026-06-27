@@ -60,6 +60,6 @@ describe("Ahorcado", () => {
 describe("Pruebas unitarias del Acceptance Test 4", () => {
   it("al iniciar, no ha ganado", () => {
     const juego = new Ahorcado("GATO");
-    expect(juego.estaGanado()).toBe(false);
+    expect(juego.estasGanado()).toBe(false);
   });
 });

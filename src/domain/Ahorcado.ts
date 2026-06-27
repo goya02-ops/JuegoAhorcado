@@ -26,4 +26,10 @@ export class Ahorcado {
   vidas(): number {
     return this.vidasRestantes;
   }
+
+  estasGanado(): boolean {
+    return this.palabra
+      .split("")
+      .every((letra) => this.letrasAcertadas.has(letra));
+  }
 }
