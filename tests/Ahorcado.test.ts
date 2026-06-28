@@ -62,6 +62,17 @@ describe("Pruebas unitarias del Acceptance Test 4", () => {
     const juego = new Ahorcado("GATO");
     expect(juego.estasGanado()).toBe(false);
   });
+  it("al adivinar todas las letras, el juego esta ganado", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("G");
+    juego.adivinar("A");
+    juego.adivinar("T");
+    juego.adivinar("O");
+    expect(juego.estasGanado()).toBe(true);
+  });
+});
+
+describe("Pruebas unitarias del Acceptance Test 5", () => {
   it("al perder, se revela la palabra completa", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("E");
