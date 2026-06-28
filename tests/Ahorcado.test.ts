@@ -74,3 +74,29 @@ describe("Pruebas unitarias del Acceptance Test 4", () => {
     expect(juego.palabraEnmascarada()).toBe("G A T O");
   });
 });
+
+describe("Pruebas unitarias del Acceptance Test 6", () => {
+  it("no penaliza vidas al repetir una letra acertada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    juego.adivinar("A");
+    expect(juego.vidas()).toBe(6);
+  });
+
+  it("no penaliza vidas al repetir una letra fallada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("E");
+    expect(juego.vidas()).toBe(5);
+  });
+
+  it("devuelve mensaje si la letra ya fue intentada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    expect(juego.ultimoMensaje()).toBe("");
+    juego.adivinar("A");
+    expect(juego.ultimoMensaje()).toBe("Letra ya intentada");
+    juego.adivinar("E");
+    expect(juego.ultimoMensaje()).toBe("");
+  });
+});
