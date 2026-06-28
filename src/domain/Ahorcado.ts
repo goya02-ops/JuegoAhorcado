@@ -7,7 +7,14 @@ export class Ahorcado {
     this.palabra = palabra.toUpperCase();
   }
 
+  estasPerdido(): boolean {
+    return this.vidasRestantes === 0;
+  }
+
   palabraEnmascarada(): string {
+    if (this.estasPerdido()) {
+      return this.palabra.split("").join(" ");
+    }
     return this.palabra
       .split("")
       .map((letra) => (this.letrasAcertadas.has(letra) ? letra : "_"))
@@ -15,6 +22,9 @@ export class Ahorcado {
   }
 
   adivinar(letra: string): void {
+    if (this.estasGanado() || this.estasPerdido()) {
+      return;
+    }
     const letraUpper = letra.toUpperCase();
     if (this.palabra.includes(letraUpper)) {
       this.letrasAcertadas.add(letraUpper);
