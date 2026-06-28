@@ -30,7 +30,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
       messageEl.textContent = "Perdiste";
       input.disabled = true;
     } else {
-      messageEl.textContent = "";
+      messageEl.textContent = juego.ultimoMensaje();
       input.disabled = false;
     }
   }
