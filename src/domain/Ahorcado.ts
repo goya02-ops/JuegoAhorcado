@@ -2,6 +2,8 @@ export class Ahorcado {
   private readonly palabra: string;
   private vidasRestantes: number = 6;
   private letrasAcertadas: Set<string> = new Set();
+  private letrasIntentadas: Set<string> = new Set();
+  private ultimoMensajeStr: string = "";
 
   constructor(palabra: string) {
     this.palabra = palabra.toUpperCase();
@@ -9,6 +11,10 @@ export class Ahorcado {
 
   estasPerdido(): boolean {
     return this.vidasRestantes === 0;
+  }
+
+  ultimoMensaje(): string {
+    return this.ultimoMensajeStr;
   }
 
   palabraEnmascarada(): string {
@@ -26,6 +32,12 @@ export class Ahorcado {
       return;
     }
     const letraUpper = letra.toUpperCase();
+    if (this.letrasIntentadas.has(letraUpper)) {
+      this.ultimoMensajeStr = "Letra ya intentada";
+      return;
+    }
+    this.letrasIntentadas.add(letraUpper);
+    this.ultimoMensajeStr = "";
     if (this.palabra.includes(letraUpper)) {
       this.letrasAcertadas.add(letraUpper);
     } else {
