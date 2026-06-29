@@ -16,6 +16,9 @@ export class Ahorcado {
 
   adivinar(letra: string): void {
     const letraUpper = letra.toUpperCase();
+    if (letraUpper.length !== 1) return;
+    if (!/^[A-Z]$/.test(letraUpper)) return;
+    if (this.estaTerminado()) return;
     if (this.palabra.includes(letraUpper)) {
       this.letrasAcertadas.add(letraUpper);
     } else {
@@ -31,5 +34,13 @@ export class Ahorcado {
     return this.palabra
       .split("")
       .every((letra) => this.letrasAcertadas.has(letra));
+  }
+
+  estaPerdido(): boolean {
+    return this.vidasRestantes === 0;
+  }
+
+  estaTerminado(): boolean {
+    return this.estasGanado() || this.estaPerdido();
   }
 }

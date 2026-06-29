@@ -71,3 +71,59 @@ describe("Pruebas unitarias del Acceptance Test 4", () => {
     expect(juego.estasGanado()).toBe(true);
   });
 });
+
+describe("Pruebas unitarias del Acceptance Test 7", () => {
+  it("al iniciar, no ha perdido", () => {
+    const juego = new Ahorcado("GATO");
+    expect(juego.estaPerdido()).toBe(false);
+  });
+
+  it("al fallar 6 veces, el juego esta perdido", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    juego.adivinar("H");
+    expect(juego.estaPerdido()).toBe(true);
+  });
+
+  it("adivinar con caracter no letra no descuenta vidas", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("1");
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+
+  it("adivinar con cadena vacia no descuenta vidas", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("");
+    expect(juego.vidas()).toBe(6);
+  });
+
+  it("adivinar despues de ganar no afecta el estado", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("G");
+    juego.adivinar("A");
+    juego.adivinar("T");
+    juego.adivinar("O");
+    juego.adivinar("X");
+    expect(juego.estasGanado()).toBe(true);
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("G A T O");
+  });
+
+  it("adivinar despues de perder no afecta el estado", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    juego.adivinar("H");
+    juego.adivinar("I");
+    expect(juego.estaPerdido()).toBe(true);
+    expect(juego.vidas()).toBe(0);
+  });
+});
