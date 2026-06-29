@@ -28,10 +28,12 @@ export class Ahorcado {
   }
 
   adivinar(letra: string): void {
+    const letraUpper = letra.toUpperCase();
+    if (letraUpper.length !== 1) return;
+    if (!/^[A-Z]$/.test(letraUpper)) return;
     if (this.estasGanado() || this.estasPerdido()) {
       return;
     }
-    const letraUpper = letra.toUpperCase();
     if (this.letrasIntentadas.has(letraUpper)) {
       this.ultimoMensajeStr = "Letra ya intentada";
       return;
