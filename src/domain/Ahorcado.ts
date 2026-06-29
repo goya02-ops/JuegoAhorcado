@@ -31,7 +31,7 @@ export class Ahorcado {
     const letraUpper = letra.toUpperCase();
     if (letraUpper.length !== 1) return;
     if (!/^[A-Z]$/.test(letraUpper)) return;
-    if (this.estasGanado() || this.estasPerdido()) {
+    if (this.estaTerminado()) {
       return;
     }
     if (this.letrasIntentadas.has(letraUpper)) {
@@ -55,5 +55,9 @@ export class Ahorcado {
     return this.palabra
       .split("")
       .every((letra) => this.letrasAcertadas.has(letra));
+  }
+
+  estaTerminado(): boolean {
+    return this.estasGanado() || this.estasPerdido();
   }
 }
