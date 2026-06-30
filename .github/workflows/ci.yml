@@ -32,7 +32,7 @@ jobs:
         name: Tests unitarios con cobertura (Vitest)
 
       - name: Report Coverage
-        uses: davelajevardi/vitest-coverage-report-action@v2
+        uses: ArtiomTr/vitest-coverage-report-action@v2
         with:
           file-path: coverage/lcov.info
 
