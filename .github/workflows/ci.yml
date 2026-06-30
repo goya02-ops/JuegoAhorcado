@@ -36,12 +36,13 @@ jobs:
         uses: davelosert/vitest-coverage-report-action@v2
 
       - name: SonarQube Scan
+        if: github.ref_name == 'main'
         uses: SonarSource/sonarqube-scan-action@v8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
           args: >
-            -Dsonar.projectKey=goya02-ops_agiles-22-6-26
+            -Dsonar.projectKey=goya02-ops_JuegoAhorcado
             -Dsonar.organization=goya02-ops
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
