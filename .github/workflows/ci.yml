@@ -36,11 +36,8 @@ jobs:
         with:
           file-path: coverage/lcov.info
 
-      - run: npx playwright install chromium --with-deps
-        name: Instalar navegadores Playwright
-
-      - run: npm run at
-        name: Tests de aceptación (Playwright)
+      - name: Verify coverage report exists
+        run: ls -la coverage/lcov.info
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v8
@@ -52,6 +49,12 @@ jobs:
             -Dsonar.organization=goya02-ops
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - run: npx playwright install chromium --with-deps
+        name: Instalar navegadores Playwright
+
+      - run: npm run at
+        name: Tests de aceptación (Playwright)
 
       - uses: actions/upload-artifact@v6
         if: always()
