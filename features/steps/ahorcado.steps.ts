@@ -44,6 +44,7 @@ Then(
     await expect(page.getByTestId("message")).toHaveText(mensajeGanador);
   },
 );
+
 When("el jugador falla todas las vidas", async ({ page }) => {
   const input = page.getByRole("textbox");
   for (const letra of ["B", "C", "D", "E", "F", "H"]) {
