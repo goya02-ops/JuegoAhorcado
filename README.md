@@ -1,5 +1,7 @@
 # Ahorcado — ATDD con TypeScript
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=goya02-ops_JuegoAhorcado&metric=coverage)](https://sonarcloud.io/dashboard?id=goya02-ops_JuegoAhorcado)
+
 Proyecto universitario de la materia **Ágiles 2025** (22-6-26): juego del Ahorcado construido con **Acceptance Test Driven Development** en un doble loop de tests.
 
 ## Stack

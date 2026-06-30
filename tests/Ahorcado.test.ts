@@ -72,10 +72,50 @@ describe("Pruebas unitarias del Acceptance Test 4", () => {
   });
 });
 
+describe("Pruebas unitarias del Acceptance Test 5", () => {
+  it("al perder, se revela la palabra completa", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("I");
+    juego.adivinar("U");
+    juego.adivinar("C");
+    juego.adivinar("H");
+    juego.adivinar("B");
+    expect(juego.estasPerdido()).toBe(true);
+    expect(juego.palabraEnmascarada()).toBe("G A T O");
+  });
+});
+
+describe("Pruebas unitarias del Acceptance Test 6", () => {
+  it("no penaliza vidas al repetir una letra acertada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    juego.adivinar("A");
+    expect(juego.vidas()).toBe(6);
+  });
+
+  it("no penaliza vidas al repetir una letra fallada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("E");
+    expect(juego.vidas()).toBe(5);
+  });
+
+  it("devuelve mensaje si la letra ya fue intentada", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    expect(juego.ultimoMensaje()).toBe("");
+    juego.adivinar("A");
+    expect(juego.ultimoMensaje()).toBe("Letra ya intentada");
+    juego.adivinar("E");
+    expect(juego.ultimoMensaje()).toBe("");
+  });
+});
+
 describe("Pruebas unitarias del Acceptance Test 7", () => {
   it("al iniciar, no ha perdido", () => {
     const juego = new Ahorcado("GATO");
-    expect(juego.estaPerdido()).toBe(false);
+    expect(juego.estasPerdido()).toBe(false);
   });
 
   it("al fallar 6 veces, el juego esta perdido", () => {
@@ -86,7 +126,7 @@ describe("Pruebas unitarias del Acceptance Test 7", () => {
     juego.adivinar("E");
     juego.adivinar("F");
     juego.adivinar("H");
-    expect(juego.estaPerdido()).toBe(true);
+    expect(juego.estasPerdido()).toBe(true);
   });
 
   it("adivinar con caracter no letra no descuenta vidas", () => {
@@ -123,7 +163,7 @@ describe("Pruebas unitarias del Acceptance Test 7", () => {
     juego.adivinar("F");
     juego.adivinar("H");
     juego.adivinar("I");
-    expect(juego.estaPerdido()).toBe(true);
+    expect(juego.estasPerdido()).toBe(true);
     expect(juego.vidas()).toBe(0);
   });
 });

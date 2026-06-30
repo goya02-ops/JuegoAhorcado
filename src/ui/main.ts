@@ -26,9 +26,12 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
     if (juego.estasGanado()) {
       messageEl.textContent = "Ganaste";
       input.disabled = true;
-    } else if (juego.estaPerdido()) {
+    } else if (juego.estasPerdido()) {
       messageEl.textContent = "Perdiste";
       input.disabled = true;
+    } else {
+      messageEl.textContent = juego.ultimoMensaje();
+      input.disabled = false;
     }
   }
 
