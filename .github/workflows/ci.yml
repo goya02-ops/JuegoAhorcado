@@ -32,12 +32,8 @@ jobs:
         name: Tests unitarios con cobertura (Vitest)
 
       - name: Report Coverage
-        uses: ArtiomTr/vitest-coverage-report-action@v2
-        with:
-          file-path: coverage/lcov.info
-
-      - name: Verify coverage report exists
-        run: ls -la coverage/lcov.info
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
 
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v8
