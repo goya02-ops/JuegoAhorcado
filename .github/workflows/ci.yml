@@ -1,5 +1,9 @@
 name: CI
 
+permissions:
+  contents: read
+  pull-requests: write
+
 on:
   push:
     branches: [main, develop]
@@ -27,6 +31,11 @@ jobs:
       - run: npm test -- --coverage
         name: Tests unitarios con cobertura (Vitest)
 
+      - name: Report Coverage
+        uses: davelajevardi/vitest-coverage-report-action@v2
+        with:
+          file-path: coverage/lcov.info
+
       - run: npx playwright install chromium --with-deps
         name: Instalar navegadores Playwright
 
@@ -51,4 +60,5 @@ jobs:
           path: |
             test-results/
             playwright-report/
+            coverage/
           if-no-files-found: ignore
