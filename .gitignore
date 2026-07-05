@@ -5,3 +5,5 @@ playwright-report/
 coverage/
 dist/
 .env
+.vercel
+.env*

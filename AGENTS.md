@@ -2,33 +2,37 @@
 
 Repo universitario: ATDD del Ahorcado en TypeScript. Antes de tocar código, leer **`GUIA-ATDD-IA-Ahorcado.md`** — contiene el proceso, arquitectura y reglas del ejercicio.
 
-## CI (GitHub Actions)
-
-CI (`ubuntu-latest`, Node 24) usa **npm**; pnpm no está disponible en el runner.
-Secuencia: `npm ci` → `npm run build` → `npm test -- --coverage` (Vitest + cobertura v8) →
-SonarQube scan (`goya02-ops_JuegoAhorcado`) → `npx playwright install chromium --with-deps` →
-`npm run at`. Sube `test-results/`, `playwright-report/`, `coverage/` como artifact.
-El repo tiene ambos lockfiles: `package-lock.json` (CI) y `pnpm-lock.yaml` (local).
-
-## Stack
-
-pnpm (v10.20.0) — usar solo pnpm localmente (CI usa npm). No hay npm/yarn.
-
 ## Comandos
 
 | Comando | Qué hace |
 |---|---|
 | `pnpm dev` | Dev server en :5173 |
+| `pnpm build` | Compilar con Vite (output en `dist/`) |
 | `pnpm test` | Vitest (unit tests del dominio) |
 | `pnpm at` | `bddgen && playwright test` (ATs en navegador) |
+
+No hay linter ni typechecker — Vite maneja TS en tiempo de build. Usar solo `pnpm` localmente; CI usa `npm`.
+
+## CI/CD (GitHub Actions)
+
+CI (`ubuntu-latest`, Node 24) usa **npm**; pnpm no está disponible en el runner.
+Secuencia: `npm ci` → `npm run build` → `npm test -- --coverage` →
+SonarQube scan (solo `main`) → `npx playwright install chromium --with-deps` →
+`npm run at`. Sube `test-results/`, `playwright-report/`, `coverage/` como artifact.
+
+CD: job `deploy` a Vercel (solo push a `main`, después de que pase `test`).
+Requiere los secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID` en GitHub.
+Config en `vercel.json`.
+
+El repo tiene ambos lockfiles: `package-lock.json` (CI) y `pnpm-lock.yaml` (local).
 
 ## Estructura
 
 ```
 src/
+  index.ts              ← composition root (lee ?word=, crea Ahorcado, mountea UI)
   domain/Ahorcado.ts    ← lógica pura (sin DOM/I/O)
-  ui/main.ts            ← consume Ahorcado, mountea UI
-  index.ts              ← composition root, lee ?word=
+  ui/main.ts            ← consume Ahorcado, mountea UI con data-testid
 features/              ← 7 .feature + steps/ahorcado.steps.ts
 tests/Ahorcado.test.ts ← UTs del dominio (Vitest)
 ```
@@ -50,7 +54,7 @@ Palabra normalizada a mayúsculas. Vidas iniciales: 6.
 
 - `domain/` no importa `ui/` ni el DOM
 - `ui/` solo usa métodos públicos de `Ahorcado`; no contiene lógica de juego
-- Los ATs ejercitan el objeto `Ahorcado` real dentro de la app real (no mock)
+- Los ATs ejercitan el `Ahorcado` real dentro de la app real (no mock)
 
 ## Seam para tests
 
@@ -60,10 +64,14 @@ La palabra secreta se inyecta por URL: `/?word=GATO`. Default si no viene: `"AHO
 
 Prefijos obligatorios: `RED:` (test fallando), `GREEN:` (código que lo pasa), `REFACTOR:` (opcional). Los RED van localmente como ancestros de GREEN. Solo se pushea con el tope en verde.
 
+## ATs (Playwright)
+
+- `bddgen` (corrido por `pnpm at`) genera specs en `.features-gen/` (`.gitignore`d)
+- Playwright auto-levanta Vite via `webServer` en `playwright.config.ts` — no hace falta `pnpm dev` aparte
+- Todos los ATs comparten steps en `features/steps/ahorcado.steps.ts`
+- Los elementos UI se localizan con `data-testid` en vez de selectores CSS/texto: `word`, `lives`, `message`
+
 ## Notas
 
 - No hay `tsconfig.json` — se usan defaults de Vite
-- `bddgen` (corrido por `pnpm at`) genera specs en `.features-gen/` (`.gitignore`d)
-- Playwright auto-levanta Vite via `webServer` en `playwright.config.ts` — no hace falta `pnpm dev` aparte para los ATs
 - Los UTs usan `environment: "node"` (sin jsdom/DOM)
-- Todos los ATs comparten los mismos step definitions en `features/steps/ahorcado.steps.ts`
