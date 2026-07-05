@@ -15,12 +15,13 @@ No hay linter ni typechecker — Vite maneja TS en tiempo de build. Usar solo `p
 
 ## CI/CD (GitHub Actions)
 
-CI (`ubuntu-latest`, Node 24) usa **npm**; pnpm no está disponible en el runner.
+CI se dispara sobre `main` y `develop` (push y PR). `ubuntu-latest`, Node 24, usa **npm**.
 Secuencia: `npm ci` → `npm run build` → `npm test -- --coverage` →
-SonarQube scan (solo `main`) → `npx playwright install chromium --with-deps` →
-`npm run at`. Sube `test-results/`, `playwright-report/`, `coverage/` como artifact.
+`vitest-coverage-report-action` → SonarQube scan (solo `main`) →
+`npx playwright install chromium --with-deps` → `npm run at`.
+Sube `test-results/`, `playwright-report/`, `coverage/` como artifact.
 
-CD: job `deploy` a Vercel (solo push a `main`, después de que pase `test`).
+CD: job `deploy` a Vercel solo desde `main` (push), después de que pase `test`.
 Requiere los secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID` en GitHub.
 Config en `vercel.json`.
 
@@ -64,6 +65,12 @@ La palabra secreta se inyecta por URL: `/?word=GATO`. Default si no viene: `"AHO
 
 Prefijos obligatorios: `RED:` (test fallando), `GREEN:` (código que lo pasa), `REFACTOR:` (opcional). Los RED van localmente como ancestros de GREEN. Solo se pushea con el tope en verde.
 
+## Bug conocido
+
+El dominio tiene dos métodos duplicados con el mismo cuerpo:
+`estasPerdido()` (línea 12, usado por UI y tests) y `estaPerdido()` (línea 60,
+nunca llamado). Corregir aplicando TDD.
+
 ## ATs (Playwright)
 
 - `bddgen` (corrido por `pnpm at`) genera specs en `.features-gen/` (`.gitignore`d)
@@ -75,3 +82,4 @@ Prefijos obligatorios: `RED:` (test fallando), `GREEN:` (código que lo pasa), `
 
 - No hay `tsconfig.json` — se usan defaults de Vite
 - Los UTs usan `environment: "node"` (sin jsdom/DOM)
+- Los `.env`/`.env.local` contienen tokens (SonarQube, Vercel). Ya ignorados en `.gitignore`, pero no exponerlos.
