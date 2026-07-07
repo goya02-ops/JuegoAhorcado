@@ -26,4 +26,20 @@ describe("mountApp - render inicial", () => {
     expect(wordEl?.textContent).toBe("_ _ _ _");
     expect(livesEl?.textContent).toBe("6");
   });
+
+describe("mountApp - interaccion", () => {
+  it("al escribir una letra y presionar Enter actualiza la palabra en el DOM", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    const wordEl = container.querySelector('[data-testid="word"]')!;
+
+    input.value = "A";
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+
+    expect(wordEl.textContent).toBe("_ A _ _");
+  });
+});
 });
