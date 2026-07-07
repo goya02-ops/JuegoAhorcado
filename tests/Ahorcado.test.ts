@@ -167,3 +167,12 @@ describe("Pruebas unitarias del Acceptance Test 7", () => {
     expect(juego.vidas()).toBe(0);
   });
 });
+
+describe("Pruebas unitarias del Acceptance Test 8", () => {
+  it("adivinar con varios caracteres no descuenta vidas", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("ABC");
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+});
