@@ -52,3 +52,13 @@ When("el jugador falla todas las vidas", async ({ page }) => {
     await input.press("Enter");
   }
 });
+
+When("el jugador escribe varias letras", async ({ page }) => {
+  const input = page.getByRole("textbox");
+  await input.fill("ABC");
+});
+
+Then("solo hay una letra escrita", async ({ page }) => {
+  const input = page.getByRole("textbox");
+  await expect(input).toHaveValue(/^.$/);
+});
