@@ -167,3 +167,39 @@ describe("Pruebas unitarias del Acceptance Test 7", () => {
     expect(juego.vidas()).toBe(0);
   });
 });
+
+describe("Pruebas unitarias del Acceptance Test 8", () => {
+  it("adivinar con varios caracteres no descuenta vidas", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("ABC");
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+});
+
+describe("Bug: metodo duplicado estaPerdido", () => {
+  it("estaTerminado devuelve true despues de perder", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    juego.adivinar("H");
+    expect(juego.estaTerminado()).toBe(true);
+  });
+
+  it("estaTerminado devuelve true despues de ganar", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("G");
+    juego.adivinar("A");
+    juego.adivinar("T");
+    juego.adivinar("O");
+    expect(juego.estaTerminado()).toBe(true);
+  });
+
+  it("estaTerminado devuelve false al iniciar", () => {
+    const juego = new Ahorcado("GATO");
+    expect(juego.estaTerminado()).toBe(false);
+  });
+});

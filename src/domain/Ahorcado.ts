@@ -57,11 +57,7 @@ export class Ahorcado {
       .every((letra) => this.letrasAcertadas.has(letra));
   }
 
-  estaPerdido(): boolean {
-    return this.vidasRestantes === 0;
-  }
-
   estaTerminado(): boolean {
-    return this.estasGanado() || this.estaPerdido();
+    return this.estasGanado() || this.estasPerdido();
   }
 }

@@ -1,8 +1,16 @@
 import { Ahorcado } from "./domain/Ahorcado";
 import { mountApp } from "./ui/main";
 
-const params = new URLSearchParams(window.location.search);
-const palabra = params.get("word") || "AHORCADO";
-const juego = new Ahorcado(palabra);
+export function obtenerPalabra(search: string): string {
+  const params = new URLSearchParams(search);
+  return params.get("word") || "AHORCADO";
+}
 
-mountApp(document.getElementById("app")!, juego);
+if (typeof document !== "undefined") {
+  const palabra = obtenerPalabra(window.location.search);
+  const juego = new Ahorcado(palabra);
+  const app = document.getElementById("app");
+  if (app) {
+    mountApp(app, juego);
+  }
+}
