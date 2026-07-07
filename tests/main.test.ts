@@ -81,3 +81,22 @@ describe("mountApp - ganar", () => {
     expect(input.disabled).toBe(true);
   });
 });
+
+describe("mountApp - perder", () => {
+  it("al fallar todas las vidas muestra Perdiste y deshabilita el input", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    const messageEl = container.querySelector('[data-testid="message"]')!;
+
+    for (const letra of ["B", "C", "D", "E", "F", "H"]) {
+      input.value = letra;
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+    }
+
+    expect(messageEl.textContent).toBe("Perdiste");
+    expect(input.disabled).toBe(true);
+  });
+});
