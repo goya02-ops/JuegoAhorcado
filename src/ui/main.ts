@@ -12,6 +12,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
 
   const input = document.createElement("input");
   input.setAttribute("type", "text");
+  input.maxLength = 1;
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
       juego.adivinar(input.value);
