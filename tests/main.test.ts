@@ -62,3 +62,22 @@ describe("mountApp - letra repetida", () => {
     expect(messageEl.textContent).toBe("Letra ya intentada");
   });
 });
+
+describe("mountApp - ganar", () => {
+  it("al adivinar todas las letras muestra Ganaste y deshabilita el input", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    const messageEl = container.querySelector('[data-testid="message"]')!;
+
+    for (const letra of ["G", "A", "T", "O"]) {
+      input.value = letra;
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+    }
+
+    expect(messageEl.textContent).toBe("Ganaste");
+    expect(input.disabled).toBe(true);
+  });
+});
