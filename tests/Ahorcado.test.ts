@@ -177,7 +177,7 @@ describe("Pruebas unitarias del Acceptance Test 8", () => {
   });
 });
 
-describe("Pruebas unitarias del Acceptance Test 8 - Reiniciar partida", () => {
+describe("Pruebas unitarias del Acceptance Test 9 - Reiniciar partida", () => {
   it("reiniciar resetea el estado después de perder", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("B");
