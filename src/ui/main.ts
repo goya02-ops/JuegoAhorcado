@@ -21,18 +21,29 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
     }
   });
 
+  const restartBtn = document.createElement("button");
+  restartBtn.setAttribute("data-testid", "restart");
+  restartBtn.textContent = "Jugar de Nuevo";
+  restartBtn.addEventListener("click", () => {
+    juego.reiniciar();
+    render();
+  });
+
   function render(): void {
     wordEl.textContent = juego.palabraEnmascarada();
     livesEl.textContent = String(juego.vidas());
     if (juego.estasGanado()) {
       messageEl.textContent = "Ganaste";
       input.disabled = true;
+      restartBtn.style.display = "";
     } else if (juego.estasPerdido()) {
       messageEl.textContent = "Perdiste";
       input.disabled = true;
+      restartBtn.style.display = "";
     } else {
       messageEl.textContent = juego.ultimoMensaje();
       input.disabled = false;
+      restartBtn.style.display = "none";
     }
   }
 
@@ -41,4 +52,5 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
   container.appendChild(livesEl);
   container.appendChild(messageEl);
   container.appendChild(input);
+  container.appendChild(restartBtn);
 }

@@ -60,4 +60,11 @@ export class Ahorcado {
   estaTerminado(): boolean {
     return this.estasGanado() || this.estasPerdido();
   }
+
+  reiniciar(): void {
+    this.vidasRestantes = 6;
+    this.letrasAcertadas = new Set();
+    this.letrasIntentadas = new Set();
+    this.ultimoMensajeStr = "";
+  }
 }
