@@ -4,7 +4,7 @@ import { mountApp } from "../src/ui/main";
 import { Ahorcado } from "../src/domain/Ahorcado";
 
 describe("mountApp - render inicial", () => {
-  it("crea elementos con data-testid word, lives, message y un input", () => {
+  it("crea elementos con data-testid word, lives, message, restart y partes del ahorcado", () => {
     const juego = new Ahorcado("GATO");
     const container = document.createElement("div");
     mountApp(container, juego);
@@ -13,6 +13,13 @@ describe("mountApp - render inicial", () => {
     expect(container.querySelector('[data-testid="lives"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="message"]')).not.toBeNull();
     expect(container.querySelector("input")).not.toBeNull();
+    expect(container.querySelector('[data-testid="restart"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="cabeza"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="torso"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="brazo-izq"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="brazo-der"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="pierna-izq"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="pierna-der"]')).not.toBeNull();
   });
 
   it("muestra la palabra enmascarada y las vidas iniciales", () => {
@@ -25,6 +32,54 @@ describe("mountApp - render inicial", () => {
 
     expect(wordEl?.textContent).toBe("_ _ _ _");
     expect(livesEl?.textContent).toBe("6");
+  });
+});
+
+describe("mountApp - dibujo progresivo", () => {
+  it("al iniciar, las partes del ahorcado estan ocultas", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const partes = ["cabeza", "torso", "brazo-izq", "brazo-der", "pierna-izq", "pierna-der"];
+    for (const parte of partes) {
+      const el = container.querySelector(`[data-testid="${parte}"]`) as HTMLElement;
+      expect(el.style.display).toBe("none");
+    }
+  });
+
+  it("tras un fallo, solo la cabeza es visible", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    input.value = "E";
+    input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+
+    const cabeza = container.querySelector('[data-testid="cabeza"]') as HTMLElement;
+    const torso = container.querySelector('[data-testid="torso"]') as HTMLElement;
+
+    expect(cabeza.style.display).not.toBe("none");
+    expect(torso.style.display).toBe("none");
+  });
+
+  it("tras seis fallos, todas las partes son visibles", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    for (const letra of ["B", "C", "D", "E", "F", "H"]) {
+      input.value = letra;
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+    }
+
+    const partes = ["cabeza", "torso", "brazo-izq", "brazo-der", "pierna-izq", "pierna-der"];
+    for (const parte of partes) {
+      const el = container.querySelector(`[data-testid="${parte}"]`) as HTMLElement;
+      expect(el.style.display).not.toBe("none");
+    }
   });
 });
 

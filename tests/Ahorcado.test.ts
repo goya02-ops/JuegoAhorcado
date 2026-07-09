@@ -227,6 +227,42 @@ describe("Pruebas unitarias del Acceptance Test 9 - Reiniciar partida", () => {
   });
 });
 
+describe("Pruebas unitarias del Acceptance Test 10 - Dibujo progresivo", () => {
+  it("al iniciar sin fallos, hay 0 partes visibles", () => {
+    const juego = new Ahorcado("GATO");
+    expect(juego.partesVisibles()).toBe(0);
+  });
+
+  it("tras 1 fallo, hay 1 parte visible", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    expect(juego.partesVisibles()).toBe(1);
+  });
+
+  it("tras 3 fallos, hay 3 partes visibles", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("I");
+    juego.adivinar("U");
+    expect(juego.partesVisibles()).toBe(3);
+  });
+
+  it("tras 6 fallos, hay 6 partes visibles", () => {
+    const juego = new Ahorcado("GATO");
+    ["B", "C", "D", "E", "F", "H"].forEach((l) => juego.adivinar(l));
+    expect(juego.partesVisibles()).toBe(6);
+  });
+
+  it("reiniciar vuelve a 0 partes visibles", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("E");
+    juego.adivinar("I");
+    expect(juego.partesVisibles()).toBe(2);
+    juego.reiniciar();
+    expect(juego.partesVisibles()).toBe(0);
+  });
+});
+
 describe("Bug: metodo duplicado estaPerdido", () => {
   it("estaTerminado devuelve true despues de perder", () => {
     const juego = new Ahorcado("GATO");

@@ -75,3 +75,17 @@ When("el jugador hace clic en {string}", async ({ page }, _boton: string) => {
 Then("no se muestra ningún mensaje", async ({ page }) => {
   await expect(page.getByTestId("message")).toHaveText("");
 });
+
+Then(
+  "la parte {string} es visible",
+  async ({ page }, parte: string) => {
+    await expect(page.getByTestId(parte)).toBeVisible();
+  },
+);
+
+Then(
+  "la parte {string} no es visible",
+  async ({ page }, parte: string) => {
+    await expect(page.getByTestId(parte)).not.toBeVisible();
+  },
+);
