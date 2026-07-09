@@ -17,9 +17,17 @@ Then("se ve la palabra {string}", async ({ page }, esperada: string) => {
 When(
   "el jugador adivina la letra {string}",
   async ({ page }, letra: string) => {
-    const input = page.getByRole("textbox");
+    const input = page.getByTestId("letter-input");
     await input.fill(letra);
     await input.press("Enter");
+  },
+);
+
+When(
+  "el jugador adivina la palabra {string}",
+  async ({ page }, palabra: string) => {
+    await page.getByTestId("word-guess").fill(palabra);
+    await page.getByTestId("guess-btn").click();
   },
 );
 
@@ -32,7 +40,7 @@ Then("se ven {int} vidas", async ({ page }, vidas: number) => {
 When("el jugador adivina todas las letras", async ({ page }) => {
   const url = new URL(page.url());
   const palabra = url.searchParams.get("word")!;
-  const input = page.getByRole("textbox");
+  const input = page.getByTestId("letter-input");
   for (const letra of palabra) {
     await input.fill(letra);
     await input.press("Enter");
@@ -46,7 +54,7 @@ Then(
 );
 
 When("el jugador falla todas las vidas", async ({ page }) => {
-  const input = page.getByRole("textbox");
+  const input = page.getByTestId("letter-input");
   for (const letra of ["B", "C", "D", "E", "F", "H"]) {
     await input.fill(letra);
     await input.press("Enter");
@@ -54,12 +62,12 @@ When("el jugador falla todas las vidas", async ({ page }) => {
 });
 
 When("el jugador escribe varias letras", async ({ page }) => {
-  const input = page.getByRole("textbox");
+  const input = page.getByTestId("letter-input");
   await input.fill("ABC");
 });
 
 Then("solo hay una letra escrita", async ({ page }) => {
-  const input = page.getByRole("textbox");
+  const input = page.getByTestId("letter-input");
   await expect(input).toHaveValue(/^.$/);
 });
 
