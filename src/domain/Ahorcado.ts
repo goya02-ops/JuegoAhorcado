@@ -67,4 +67,8 @@ export class Ahorcado {
     this.letrasIntentadas = new Set();
     this.ultimoMensajeStr = "";
   }
+
+  partesVisibles(): number {
+    return 6 - this.vidasRestantes;
+  }
 }
