@@ -20,6 +20,8 @@ describe("mountApp - render inicial", () => {
     expect(container.querySelector('[data-testid="brazo-der"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="pierna-izq"]')).not.toBeNull();
     expect(container.querySelector('[data-testid="pierna-der"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="word-guess"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="guess-btn"]')).not.toBeNull();
   });
 
   it("muestra la palabra enmascarada y las vidas iniciales", () => {
