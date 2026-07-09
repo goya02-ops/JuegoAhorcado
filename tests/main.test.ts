@@ -82,6 +82,56 @@ describe("mountApp - ganar", () => {
   });
 });
 
+describe("mountApp - reiniciar", () => {
+  it("reiniciar despues de ganar restaura el tablero y habilita el input", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    const wordEl = container.querySelector('[data-testid="word"]')!;
+    const livesEl = container.querySelector('[data-testid="lives"]')!;
+    const restartBtn = container.querySelector('[data-testid="restart"]')!;
+
+    for (const letra of ["G", "A", "T", "O"]) {
+      input.value = letra;
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+    }
+
+    expect(input.disabled).toBe(true);
+
+    (restartBtn as HTMLButtonElement).click();
+
+    expect(wordEl.textContent).toBe("_ _ _ _");
+    expect(livesEl.textContent).toBe("6");
+    expect(input.disabled).toBe(false);
+  });
+
+  it("reiniciar despues de perder restaura el tablero y habilita el input", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const input = container.querySelector("input")!;
+    const wordEl = container.querySelector('[data-testid="word"]')!;
+    const livesEl = container.querySelector('[data-testid="lives"]')!;
+    const restartBtn = container.querySelector('[data-testid="restart"]')!;
+
+    for (const letra of ["B", "C", "D", "E", "F", "H"]) {
+      input.value = letra;
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+    }
+
+    expect(input.disabled).toBe(true);
+
+    (restartBtn as HTMLButtonElement).click();
+
+    expect(wordEl.textContent).toBe("_ _ _ _");
+    expect(livesEl.textContent).toBe("6");
+    expect(input.disabled).toBe(false);
+  });
+});
+
 describe("mountApp - perder", () => {
   it("al fallar todas las vidas muestra Perdiste y deshabilita el input", () => {
     const juego = new Ahorcado("GATO");

@@ -62,3 +62,16 @@ Then("solo hay una letra escrita", async ({ page }) => {
   const input = page.getByRole("textbox");
   await expect(input).toHaveValue(/^.$/);
 });
+
+Then("se muestra el botón {string}", async ({ page }, boton: string) => {
+  await expect(page.getByTestId("restart")).toBeVisible();
+  await expect(page.getByTestId("restart")).toHaveText(boton);
+});
+
+When("el jugador hace clic en {string}", async ({ page }, _boton: string) => {
+  await page.getByTestId("restart").click();
+});
+
+Then("no se muestra ningún mensaje", async ({ page }) => {
+  await expect(page.getByTestId("message")).toHaveText("");
+});

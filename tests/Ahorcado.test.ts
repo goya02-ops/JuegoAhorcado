@@ -177,6 +177,56 @@ describe("Pruebas unitarias del Acceptance Test 8", () => {
   });
 });
 
+describe("Pruebas unitarias del Acceptance Test 8 - Reiniciar partida", () => {
+  it("reiniciar resetea el estado después de perder", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("B");
+    juego.adivinar("C");
+    juego.adivinar("D");
+    juego.adivinar("E");
+    juego.adivinar("F");
+    juego.adivinar("H");
+    expect(juego.estasPerdido()).toBe(true);
+    juego.reiniciar();
+    expect(juego.estasPerdido()).toBe(false);
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+
+  it("reiniciar resetea el estado después de ganar", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("G");
+    juego.adivinar("A");
+    juego.adivinar("T");
+    juego.adivinar("O");
+    expect(juego.estasGanado()).toBe(true);
+    juego.reiniciar();
+    expect(juego.estasGanado()).toBe(false);
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
+  });
+
+  it("reiniciar limpia el ultimo mensaje", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("A");
+    juego.adivinar("A");
+    expect(juego.ultimoMensaje()).toBe("Letra ya intentada");
+    juego.reiniciar();
+    expect(juego.ultimoMensaje()).toBe("");
+  });
+
+  it("reiniciar mantiene la misma palabra", () => {
+    const juego = new Ahorcado("GATO");
+    juego.adivinar("G");
+    juego.adivinar("A");
+    juego.adivinar("T");
+    juego.adivinar("O");
+    juego.reiniciar();
+    juego.adivinar("G");
+    expect(juego.palabraEnmascarada()).toBe("G _ _ _");
+  });
+});
+
 describe("Bug: metodo duplicado estaPerdido", () => {
   it("estaTerminado devuelve true despues de perder", () => {
     const juego = new Ahorcado("GATO");
