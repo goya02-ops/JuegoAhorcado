@@ -52,20 +52,34 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
   header.textContent = 'AHORCADO';
   appEl.appendChild(header);
 
-  const wordEl = document.createElement('div');
-  wordEl.className = 'word';
-  wordEl.setAttribute('data-testid', 'word');
-  appEl.appendChild(wordEl);
+  const columns = document.createElement('div');
+  columns.className = 'columns';
+
+  const leftCol = document.createElement('div');
+  leftCol.className = 'col col--left';
 
   const livesEl = document.createElement('div');
   livesEl.className = 'lives';
   livesEl.setAttribute('data-testid', 'lives');
-  appEl.appendChild(livesEl);
+  leftCol.appendChild(livesEl);
+
+  const { container: hangmanContainer, parteEls } = createHangman();
+  leftCol.appendChild(hangmanContainer);
+
+  const wordEl = document.createElement('div');
+  wordEl.className = 'word';
+  wordEl.setAttribute('data-testid', 'word');
+  leftCol.appendChild(wordEl);
 
   const messageEl = document.createElement('div');
   messageEl.className = 'message';
   messageEl.setAttribute('data-testid', 'message');
-  appEl.appendChild(messageEl);
+  leftCol.appendChild(messageEl);
+
+  columns.appendChild(leftCol);
+
+  const rightCol = document.createElement('div');
+  rightCol.className = 'col col--right';
 
   const letterRow = document.createElement('div');
   letterRow.className = 'input-row';
@@ -84,7 +98,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
     }
   });
   letterRow.appendChild(input);
-  appEl.appendChild(letterRow);
+  rightCol.appendChild(letterRow);
 
   const wordRow = document.createElement('div');
   wordRow.className = 'input-row';
@@ -114,7 +128,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
 
   wordRow.appendChild(wordInput);
   wordRow.appendChild(guessBtn);
-  appEl.appendChild(wordRow);
+  rightCol.appendChild(wordRow);
 
   const restartBtn = document.createElement('button');
   restartBtn.setAttribute('data-testid', 'restart');
@@ -124,10 +138,10 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
     juego.reiniciar();
     render();
   });
-  appEl.appendChild(restartBtn);
+  rightCol.appendChild(restartBtn);
 
-  const { container: hangmanContainer, parteEls } = createHangman();
-  appEl.appendChild(hangmanContainer);
+  columns.appendChild(rightCol);
+  appEl.appendChild(columns);
 
   function render(): void {
     wordEl.textContent = juego.palabraEnmascarada();
