@@ -1,4 +1,5 @@
 import { Ahorcado } from '../domain/Ahorcado';
+import './styles.css';
 
 const PARTES = [
   'cabeza',
@@ -9,46 +10,23 @@ const PARTES = [
   'pierna-der',
 ];
 
-const PARTE_ESTILOS: Record<string, string> = {
-  cabeza:
-    'position:absolute;top:40px;left:133px;width:34px;height:34px;border-radius:50%;border:3px solid #333;box-sizing:border-box;',
-  torso:
-    'position:absolute;top:74px;left:148px;width:4px;height:60px;background:#333;',
-  'brazo-izq':
-    'position:absolute;top:85px;left:120px;width:28px;height:4px;background:#333;transform-origin:100% 50%;',
-  'brazo-der':
-    'position:absolute;top:85px;left:152px;width:28px;height:4px;background:#333;',
-  'pierna-izq':
-    'position:absolute;top:130px;left:122px;width:30px;height:4px;background:#333;transform:rotate(45deg);transform-origin:100% 50%;',
-  'pierna-der':
-    'position:absolute;top:130px;left:148px;width:30px;height:4px;background:#333;transform:rotate(-45deg);transform-origin:0% 50%;',
-};
+const GALOWS_CLASSES = [
+  'hangman__gallows hangman__gallows--base',
+  'hangman__gallows hangman__gallows--post',
+  'hangman__gallows hangman__gallows--beam',
+  'hangman__gallows hangman__gallows--rope',
+];
 
 function createHangman(): {
   container: HTMLElement;
   parteEls: Record<string, HTMLElement>;
 } {
   const container = document.createElement('div');
-  container.style.cssText =
-    'position:relative;width:200px;height:220px;margin:10px 0;';
+  container.className = 'hangman';
 
-  const gallows = [
-    {
-      css: 'position:absolute;bottom:0;left:0;width:100%;height:4px;background:#333;',
-    },
-    {
-      css: 'position:absolute;bottom:0;left:30px;width:4px;height:100%;background:#333;',
-    },
-    {
-      css: 'position:absolute;top:0;left:30px;width:120px;height:4px;background:#333;',
-    },
-    {
-      css: 'position:absolute;top:0;left:148px;width:4px;height:40px;background:#333;',
-    },
-  ];
-  for (const g of gallows) {
+  for (const cls of GALOWS_CLASSES) {
     const el = document.createElement('div');
-    el.style.cssText = g.css;
+    el.className = cls;
     container.appendChild(el);
   }
 
@@ -56,7 +34,8 @@ function createHangman(): {
   for (const parte of PARTES) {
     const el = document.createElement('div');
     el.setAttribute('data-testid', parte);
-    el.style.cssText = PARTE_ESTILOS[parte] + 'display:none;';
+    el.className = `hangman__part hangman__part--${parte}`;
+    el.style.display = 'none';
     parteEls[parte] = el;
     container.appendChild(el);
   }
@@ -65,19 +44,38 @@ function createHangman(): {
 }
 
 export function mountApp(container: HTMLElement, juego: Ahorcado): void {
+  const appEl = document.createElement('div');
+  appEl.className = 'game';
+
+  const header = document.createElement('h1');
+  header.className = 'header';
+  header.textContent = 'AHORCADO';
+  appEl.appendChild(header);
+
   const wordEl = document.createElement('div');
+  wordEl.className = 'word';
   wordEl.setAttribute('data-testid', 'word');
+  appEl.appendChild(wordEl);
 
   const livesEl = document.createElement('div');
+  livesEl.className = 'lives';
   livesEl.setAttribute('data-testid', 'lives');
+  appEl.appendChild(livesEl);
 
   const messageEl = document.createElement('div');
+  messageEl.className = 'message';
   messageEl.setAttribute('data-testid', 'message');
+  appEl.appendChild(messageEl);
+
+  const letterRow = document.createElement('div');
+  letterRow.className = 'input-row';
 
   const input = document.createElement('input');
   input.setAttribute('type', 'text');
   input.setAttribute('data-testid', 'letter-input');
+  input.className = 'input letter-input';
   input.maxLength = 1;
+  input.placeholder = 'A';
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
       juego.adivinar(input.value);
@@ -85,22 +83,21 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
       render();
     }
   });
+  letterRow.appendChild(input);
+  appEl.appendChild(letterRow);
 
-  const restartBtn = document.createElement('button');
-  restartBtn.setAttribute('data-testid', 'restart');
-  restartBtn.textContent = 'Jugar de Nuevo';
-  restartBtn.addEventListener('click', () => {
-    juego.reiniciar();
-    render();
-  });
+  const wordRow = document.createElement('div');
+  wordRow.className = 'input-row';
 
   const wordInput = document.createElement('input');
   wordInput.setAttribute('data-testid', 'word-guess');
+  wordInput.className = 'input word-guess';
   wordInput.maxLength = 20;
   wordInput.placeholder = 'Adivinar palabra';
 
   const guessBtn = document.createElement('button');
   guessBtn.setAttribute('data-testid', 'guess-btn');
+  guessBtn.className = 'btn guess-btn';
   guessBtn.textContent = 'Adivinar';
 
   const procesarPalabra = (): void => {
@@ -115,18 +112,39 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
 
   guessBtn.addEventListener('click', procesarPalabra);
 
+  wordRow.appendChild(wordInput);
+  wordRow.appendChild(guessBtn);
+  appEl.appendChild(wordRow);
+
+  const restartBtn = document.createElement('button');
+  restartBtn.setAttribute('data-testid', 'restart');
+  restartBtn.className = 'btn restart-btn';
+  restartBtn.textContent = 'Jugar de Nuevo';
+  restartBtn.addEventListener('click', () => {
+    juego.reiniciar();
+    render();
+  });
+  appEl.appendChild(restartBtn);
+
   const { container: hangmanContainer, parteEls } = createHangman();
+  appEl.appendChild(hangmanContainer);
 
   function render(): void {
     wordEl.textContent = juego.palabraEnmascarada();
     livesEl.textContent = String(juego.vidas());
+
+    messageEl.className = 'message';
+    restartBtn.style.display = 'none';
+
     if (juego.estasGanado()) {
       messageEl.textContent = 'Ganaste';
+      messageEl.classList.add('message--success');
       input.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = '';
     } else if (juego.estasPerdido()) {
       messageEl.textContent = 'Perdiste';
+      messageEl.classList.add('message--error');
       input.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = '';
@@ -134,8 +152,8 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
       messageEl.textContent = juego.ultimoMensaje();
       input.disabled = false;
       wordInput.disabled = false;
-      restartBtn.style.display = 'none';
     }
+
     const visibles = juego.partesVisibles();
     for (let i = 0; i < PARTES.length; i++) {
       parteEls[PARTES[i]].style.display = i < visibles ? '' : 'none';
@@ -143,12 +161,5 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
   }
 
   render();
-  container.appendChild(hangmanContainer);
-  container.appendChild(wordEl);
-  container.appendChild(livesEl);
-  container.appendChild(messageEl);
-  container.appendChild(input);
-  container.appendChild(wordInput);
-  container.appendChild(guessBtn);
-  container.appendChild(restartBtn);
+  container.appendChild(appEl);
 }
