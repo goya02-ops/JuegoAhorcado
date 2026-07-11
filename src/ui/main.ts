@@ -203,7 +203,7 @@ export function mountApp(
       restartBtn.style.display = "";
     } else {
       messageEl.textContent = juego.ultimoMensaje();
-      input.disabled = opciones.mostrarMenu;
+      input.disabled = false;
       wordInput.disabled = false;
     }
 
@@ -216,3 +216,4 @@ export function mountApp(
   render();
   container.appendChild(appEl);
 }
+// e

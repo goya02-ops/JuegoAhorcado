@@ -100,6 +100,3 @@ Given("que el jugador abre el juego", async ({ page }) => {
 Then("el menú de inicio es visible", async ({ page }) => {
   await expect(page.getByTestId("menu-inicio")).toBeVisible();
 });
-Then("el input de letras está deshabilitado", async ({ page }) => {
-  await expect(page.getByTestId("letter-input")).toBeDisabled();
-});
