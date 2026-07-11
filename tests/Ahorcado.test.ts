@@ -354,8 +354,8 @@ describe("Bug: metodo duplicado estaPerdido", () => {
 // Agos
 
 describe("Pruebas unitarias del AT 19 - Menu visible", () => {
-  it("arranca el juego con estado menuOpen verdadero", () => {
+  it("arranca el juego con estado menuAbierto verdadero", () => {
     const juego = new Ahorcado("GATO");
-    expect(juego.menuIsOpen()).toBe(true);
+    expect(juego.tenesMenuAbierto()).toBe(true);
   });
 });

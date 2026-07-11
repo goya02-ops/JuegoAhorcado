@@ -4,7 +4,7 @@ export class Ahorcado {
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
   private ultimoMensajeStr: string = "";
-  private menuOpen: boolean = true;
+  private menuAbierto: boolean = true;
 
   constructor(palabra: string) {
     this.palabra = palabra.toUpperCase();
@@ -89,7 +89,7 @@ export class Ahorcado {
       this.vidasRestantes = 0;
     }
   }
-  menuIsOpen(): boolean {
-    return this.menuOpen;
+  tenesMenuAbierto(): boolean {
+    return this.menuAbierto;
   }
 }
