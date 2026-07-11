@@ -7,10 +7,13 @@ export function obtenerPalabra(search: string): string {
 }
 
 if (typeof document !== "undefined") {
+  const params = new URLSearchParams(window.location.search);
+  const wordFromUrl = params.get("word");
+
   const palabra = obtenerPalabra(window.location.search);
   const juego = new Ahorcado(palabra);
   const app = document.getElementById("app");
   if (app) {
-    mountApp(app, juego);
+    mountApp(app, juego, { mostrarMenu: !wordFromUrl });
   }
 }

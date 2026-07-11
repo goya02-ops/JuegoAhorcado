@@ -43,7 +43,11 @@ function createHangman(): {
   return { container, parteEls };
 }
 
-export function mountApp(container: HTMLElement, juego: Ahorcado): void {
+export function mountApp(
+  container: HTMLElement,
+  juego: Ahorcado,
+  opciones: { mostrarMenu: boolean } = { mostrarMenu: true },
+): void {
   const appEl = document.createElement("div");
   appEl.className = "game";
 
@@ -77,9 +81,15 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
   const btnCustom = document.createElement("button");
   btnCustom.className = "btn btn--secondary";
   btnCustom.textContent = "Jugar Personalizada";
+
   menu.appendChild(btnCustom);
   overlay.appendChild(menu);
   document.body.appendChild(overlay);
+
+  if (!opciones.mostrarMenu) {
+    // Esto es para que pasen los acceptance test anteriores al 19. Idealmente, no debería manejarse aca, con un futuro refactor se debería manejar en el constructor de la clase ahorcado.
+    overlay.style.display = "none";
+  }
 
   const columns = document.createElement("div");
   columns.className = "columns";
@@ -193,7 +203,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
       restartBtn.style.display = "";
     } else {
       messageEl.textContent = juego.ultimoMensaje();
-      input.disabled = false;
+      input.disabled = opciones.mostrarMenu;
       wordInput.disabled = false;
     }
 
