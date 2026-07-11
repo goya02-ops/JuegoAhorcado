@@ -338,22 +338,94 @@ body {
   }
 }
 
-/*AT 19-23 Agos
+/*AT 19-23 Agos */
 
-.overlay{
-  position:relative;
-  z-index:1000;
-  background-color: #ef4444;
-  width:100%;
-  height:100vh;
+.overlay {
+  position: fixed;
+  z-index: 1000;
+  width: 100%;
+  height: 100vh;
+  margin-top: -30px; /*Fix informal por pensar mal la idea de padding top en el body*/
+
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
 }
-.menu{
-  position:absolute;
-  z-index:1100;
-  top:0;
-  bottom:0;
+.menu {
+  position: absolute;
+  z-index: 1100;
+  top: 0;
+  bottom: 0;
   left: 0;
-  right:0;
-
+  right: 0;
+  margin: auto;
+  width: 420px;
+  height: fit-content;
+  background-color: white;
+  border-radius: 16px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+  height: 500px;
+  padding-top: 50px;
 }
-  */
+
+/* Título dentro del menú — agregalo desde el JS también */
+.menu__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1e293b;
+  text-align: center;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.05em;
+  margin-bottom: 70px;
+}
+
+.menu__subtitle {
+  font-size: 0.9rem;
+  color: #64748b;
+  text-align: center;
+  margin: 0 0 8px 0;
+}
+
+/* Botones específicos del menú */
+.menu .btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    transform 0.1s,
+    box-shadow 0.1s;
+}
+
+.menu .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.menu .btn:active {
+  transform: translateY(0);
+}
+
+.btn--primary {
+  background-color: #6366f1;
+  color: white;
+}
+
+.btn--primary:hover {
+  background-color: #4f46e5;
+}
+
+.btn--secondary {
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+.btn--secondary:hover {
+  background-color: #e2e8f0;
+}

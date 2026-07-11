@@ -1,41 +1,41 @@
-import { Ahorcado } from '../domain/Ahorcado';
-import './styles.css';
+import { Ahorcado } from "../domain/Ahorcado";
+import "./styles.css";
 
 const PARTES = [
-  'cabeza',
-  'torso',
-  'brazo-izq',
-  'brazo-der',
-  'pierna-izq',
-  'pierna-der',
+  "cabeza",
+  "torso",
+  "brazo-izq",
+  "brazo-der",
+  "pierna-izq",
+  "pierna-der",
 ];
 
 const GALOWS_CLASSES = [
-  'hangman__gallows hangman__gallows--base',
-  'hangman__gallows hangman__gallows--post',
-  'hangman__gallows hangman__gallows--beam',
-  'hangman__gallows hangman__gallows--rope',
+  "hangman__gallows hangman__gallows--base",
+  "hangman__gallows hangman__gallows--post",
+  "hangman__gallows hangman__gallows--beam",
+  "hangman__gallows hangman__gallows--rope",
 ];
 
 function createHangman(): {
   container: HTMLElement;
   parteEls: Record<string, HTMLElement>;
 } {
-  const container = document.createElement('div');
-  container.className = 'hangman';
+  const container = document.createElement("div");
+  container.className = "hangman";
 
   for (const cls of GALOWS_CLASSES) {
-    const el = document.createElement('div');
+    const el = document.createElement("div");
     el.className = cls;
     container.appendChild(el);
   }
 
   const parteEls: Record<string, HTMLElement> = {};
   for (const parte of PARTES) {
-    const el = document.createElement('div');
-    el.setAttribute('data-testid', parte);
+    const el = document.createElement("div");
+    el.setAttribute("data-testid", parte);
     el.className = `hangman__part hangman__part--${parte}`;
-    el.style.display = 'none';
+    el.style.display = "none";
     parteEls[parte] = el;
     container.appendChild(el);
   }
@@ -44,97 +44,126 @@ function createHangman(): {
 }
 
 export function mountApp(container: HTMLElement, juego: Ahorcado): void {
-  const appEl = document.createElement('div');
-  appEl.className = 'game';
+  const appEl = document.createElement("div");
+  appEl.className = "game";
 
-  const header = document.createElement('h1');
-  header.className = 'header';
-  header.textContent = 'AHORCADO';
+  const header = document.createElement("h1");
+  header.className = "header";
+  header.textContent = "AHORCADO";
   appEl.appendChild(header);
 
-  const columns = document.createElement('div');
-  columns.className = 'columns';
+  const overlay = document.createElement("div");
+  overlay.className = "overlay";
 
-  const leftCol = document.createElement('div');
-  leftCol.className = 'col col--left';
+  const menu = document.createElement("div");
+  menu.className = "menu";
+  menu.setAttribute("data-testid", "menu-inicio");
 
-  const livesEl = document.createElement('div');
-  livesEl.className = 'lives';
-  livesEl.setAttribute('data-testid', 'lives');
+  const titulo = document.createElement("h2");
+  titulo.className = "menu__title";
+  titulo.textContent = "AHORCADO";
+  menu.appendChild(titulo);
+
+  const subtitulo = document.createElement("p");
+  subtitulo.className = "menu__subtitle";
+  subtitulo.textContent = "¿Cómo querés jugar?";
+  menu.appendChild(subtitulo);
+
+  const btnRandom = document.createElement("button");
+  btnRandom.className = "btn btn--primary";
+  btnRandom.textContent = "Jugar Aleatoria";
+  menu.appendChild(btnRandom);
+
+  const btnCustom = document.createElement("button");
+  btnCustom.className = "btn btn--secondary";
+  btnCustom.textContent = "Jugar Personalizada";
+  menu.appendChild(btnCustom);
+  overlay.appendChild(menu);
+  document.body.appendChild(overlay);
+
+  const columns = document.createElement("div");
+  columns.className = "columns";
+
+  const leftCol = document.createElement("div");
+  leftCol.className = "col col--left";
+
+  const livesEl = document.createElement("div");
+  livesEl.className = "lives";
+  livesEl.setAttribute("data-testid", "lives");
   leftCol.appendChild(livesEl);
 
   const { container: hangmanContainer, parteEls } = createHangman();
   leftCol.appendChild(hangmanContainer);
 
-  const wordEl = document.createElement('div');
-  wordEl.className = 'word';
-  wordEl.setAttribute('data-testid', 'word');
+  const wordEl = document.createElement("div");
+  wordEl.className = "word";
+  wordEl.setAttribute("data-testid", "word");
   leftCol.appendChild(wordEl);
 
-  const messageEl = document.createElement('div');
-  messageEl.className = 'message';
-  messageEl.setAttribute('data-testid', 'message');
+  const messageEl = document.createElement("div");
+  messageEl.className = "message";
+  messageEl.setAttribute("data-testid", "message");
   leftCol.appendChild(messageEl);
 
   columns.appendChild(leftCol);
 
-  const rightCol = document.createElement('div');
-  rightCol.className = 'col col--right';
+  const rightCol = document.createElement("div");
+  rightCol.className = "col col--right";
 
-  const letterRow = document.createElement('div');
-  letterRow.className = 'input-row';
+  const letterRow = document.createElement("div");
+  letterRow.className = "input-row";
 
-  const input = document.createElement('input');
-  input.setAttribute('type', 'text');
-  input.setAttribute('data-testid', 'letter-input');
-  input.className = 'input letter-input';
+  const input = document.createElement("input");
+  input.setAttribute("type", "text");
+  input.setAttribute("data-testid", "letter-input");
+  input.className = "input letter-input";
   input.maxLength = 1;
-  input.placeholder = 'A';
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
+  input.placeholder = "A";
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
       juego.adivinar(input.value);
-      input.value = '';
+      input.value = "";
       render();
     }
   });
   letterRow.appendChild(input);
   rightCol.appendChild(letterRow);
 
-  const wordRow = document.createElement('div');
-  wordRow.className = 'input-row';
+  const wordRow = document.createElement("div");
+  wordRow.className = "input-row";
 
-  const wordInput = document.createElement('input');
-  wordInput.setAttribute('data-testid', 'word-guess');
-  wordInput.className = 'input word-guess';
+  const wordInput = document.createElement("input");
+  wordInput.setAttribute("data-testid", "word-guess");
+  wordInput.className = "input word-guess";
   wordInput.maxLength = 20;
-  wordInput.placeholder = 'Adivinar palabra';
+  wordInput.placeholder = "Adivinar palabra";
 
-  const guessBtn = document.createElement('button');
-  guessBtn.setAttribute('data-testid', 'guess-btn');
-  guessBtn.className = 'btn guess-btn';
-  guessBtn.textContent = 'Adivinar';
+  const guessBtn = document.createElement("button");
+  guessBtn.setAttribute("data-testid", "guess-btn");
+  guessBtn.className = "btn guess-btn";
+  guessBtn.textContent = "Adivinar";
 
   const procesarPalabra = (): void => {
     juego.adivinarPalabra(wordInput.value);
-    wordInput.value = '';
+    wordInput.value = "";
     render();
   };
 
-  wordInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') procesarPalabra();
+  wordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") procesarPalabra();
   });
 
-  guessBtn.addEventListener('click', procesarPalabra);
+  guessBtn.addEventListener("click", procesarPalabra);
 
   wordRow.appendChild(wordInput);
   wordRow.appendChild(guessBtn);
   rightCol.appendChild(wordRow);
 
-  const restartBtn = document.createElement('button');
-  restartBtn.setAttribute('data-testid', 'restart');
-  restartBtn.className = 'btn restart-btn';
-  restartBtn.textContent = 'Jugar de Nuevo';
-  restartBtn.addEventListener('click', () => {
+  const restartBtn = document.createElement("button");
+  restartBtn.setAttribute("data-testid", "restart");
+  restartBtn.className = "btn restart-btn";
+  restartBtn.textContent = "Jugar de Nuevo";
+  restartBtn.addEventListener("click", () => {
     juego.reiniciar();
     render();
   });
@@ -147,21 +176,21 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
     wordEl.textContent = juego.palabraEnmascarada();
     livesEl.textContent = String(juego.vidas());
 
-    messageEl.className = 'message';
-    restartBtn.style.display = 'none';
+    messageEl.className = "message";
+    restartBtn.style.display = "none";
 
     if (juego.estasGanado()) {
-      messageEl.textContent = 'Ganaste';
-      messageEl.classList.add('message--success');
+      messageEl.textContent = "Ganaste";
+      messageEl.classList.add("message--success");
       input.disabled = true;
       wordInput.disabled = true;
-      restartBtn.style.display = '';
+      restartBtn.style.display = "";
     } else if (juego.estasPerdido()) {
-      messageEl.textContent = 'Perdiste';
-      messageEl.classList.add('message--error');
+      messageEl.textContent = "Perdiste";
+      messageEl.classList.add("message--error");
       input.disabled = true;
       wordInput.disabled = true;
-      restartBtn.style.display = '';
+      restartBtn.style.display = "";
     } else {
       messageEl.textContent = juego.ultimoMensaje();
       input.disabled = false;
@@ -170,7 +199,7 @@ export function mountApp(container: HTMLElement, juego: Ahorcado): void {
 
     const visibles = juego.partesVisibles();
     for (let i = 0; i < PARTES.length; i++) {
-      parteEls[PARTES[i]].style.display = i < visibles ? '' : 'none';
+      parteEls[PARTES[i]].style.display = i < visibles ? "" : "none";
     }
   }
 
