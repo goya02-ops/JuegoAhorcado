@@ -3,7 +3,8 @@ export class Ahorcado {
   private vidasRestantes: number = 6;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
-  private ultimoMensajeStr: string = '';
+  private ultimoMensajeStr: string = "";
+  private menuOpen: boolean = true;
 
   constructor(palabra: string) {
     this.palabra = palabra.toUpperCase();
@@ -19,12 +20,12 @@ export class Ahorcado {
 
   palabraEnmascarada(): string {
     if (this.estasPerdido()) {
-      return this.palabra.split('').join(' ');
+      return this.palabra.split("").join(" ");
     }
     return this.palabra
-      .split('')
-      .map((letra) => (this.letrasAcertadas.has(letra) ? letra : '_'))
-      .join(' ');
+      .split("")
+      .map((letra) => (this.letrasAcertadas.has(letra) ? letra : "_"))
+      .join(" ");
   }
 
   adivinar(letra: string): void {
@@ -35,11 +36,11 @@ export class Ahorcado {
       return;
     }
     if (this.letrasIntentadas.has(letraUpper)) {
-      this.ultimoMensajeStr = 'Letra ya intentada';
+      this.ultimoMensajeStr = "Letra ya intentada";
       return;
     }
     this.letrasIntentadas.add(letraUpper);
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
     if (this.palabra.includes(letraUpper)) {
       this.letrasAcertadas.add(letraUpper);
     } else {
@@ -53,7 +54,7 @@ export class Ahorcado {
 
   estasGanado(): boolean {
     return this.palabra
-      .split('')
+      .split("")
       .every((letra) => this.letrasAcertadas.has(letra));
   }
 
@@ -65,7 +66,7 @@ export class Ahorcado {
     this.vidasRestantes = 6;
     this.letrasAcertadas = new Set();
     this.letrasIntentadas = new Set();
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
   }
 
   partesVisibles(): number {
@@ -76,7 +77,7 @@ export class Ahorcado {
     if (this.estaTerminado()) return;
 
     if (palabra.length <= 1) return;
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
 
     const palabraUpper = palabra.toUpperCase().trim();
 
@@ -87,5 +88,8 @@ export class Ahorcado {
     } else {
       this.vidasRestantes = 0;
     }
+  }
+  menuIsOpen(): boolean {
+    return this.menuOpen;
   }
 }
