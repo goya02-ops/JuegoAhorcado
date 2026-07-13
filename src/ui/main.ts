@@ -101,6 +101,11 @@ export function mountApp(
     customBtn.className = "btn btn--primary";
     customBtn.textContent = "Jugar";
 
+    customBtn.addEventListener("click", () => {
+      juego = new Ahorcado(customInput.value);
+      render();
+    });
+
     menu.appendChild(customInput);
     menu.appendChild(customBtn);
   });

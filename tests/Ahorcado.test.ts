@@ -372,3 +372,11 @@ describe("Pruebas unitarias del AT 20 - Jugar partida con palabra aleatoria", ()
     expect(juego.tenesMenuAbierto()).toBe(false);
   });
 });
+
+describe("Pruebas unitarias del AT 22 - Confirmar palabra personalizada", () => {
+  it("cerrarMenu cambia el estado de menuAbierto a false", () => {
+    const juego = new Ahorcado();
+    juego.cerrarMenu();
+    expect(juego.tenesMenuAbierto()).toBe(false);
+  });
+});
