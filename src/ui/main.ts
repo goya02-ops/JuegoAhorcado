@@ -91,7 +91,7 @@ export function mountApp(
   document.body.appendChild(overlay);
 
   if (!opciones.mostrarMenu) {
-    // Esto es para que pasen los acceptance test anteriores al 19. Idealmente, no debería manejarse aca, con un futuro refactor se debería manejar en el constructor de la clase ahorcado.
+    // Esto es para que pasen los acceptance test anteriores al 19.
     overlay.style.display = "none";
   }
 
