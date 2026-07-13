@@ -133,3 +133,18 @@ Then("se muestra un input para escribir la palabra", async ({ page }) => {
 Then("un boton para confirmar", async ({ page }) => {
   await expect(page.getByTestId("custom-word-btn")).toBeVisible();
 });
+
+// AT 22
+
+Given("que el jugador está en el formulario de palabra personalizada", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Jugar Personalizada" }).click();
+});
+
+When("el jugador escribe {string} en el input de palabra personalizada", async ({ page }, palabra: string) => {
+  await page.getByTestId("custom-word-input").fill(palabra);
+});
+
+When("el jugador confirma la palabra personalizada", async ({ page }) => {
+  await page.getByTestId("custom-word-btn").click();
+});
