@@ -85,6 +85,25 @@ export function mountApp(
   const btnCustom = document.createElement("button");
   btnCustom.className = "btn btn--secondary";
   btnCustom.textContent = "Jugar Personalizada";
+  btnCustom.addEventListener("click", () => {
+    btnRandom.style.display = "none";
+    btnCustom.style.display = "none";
+    subtitulo.style.display = "none";
+
+    const customInput = document.createElement("input");
+    customInput.setAttribute("type", "text");
+    customInput.setAttribute("data-testid", "custom-word-input");
+    customInput.className = "input";
+    customInput.placeholder = "Escribí tu palabra";
+
+    const customBtn = document.createElement("button");
+    customBtn.setAttribute("data-testid", "custom-word-btn");
+    customBtn.className = "btn btn--primary";
+    customBtn.textContent = "Jugar";
+
+    menu.appendChild(customInput);
+    menu.appendChild(customBtn);
+  });
 
   menu.appendChild(btnCustom);
   overlay.appendChild(menu);
