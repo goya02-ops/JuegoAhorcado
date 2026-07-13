@@ -1,13 +1,32 @@
 export class Ahorcado {
-  private readonly palabra: string;
+  private readonly palabra!: string;
   private vidasRestantes: number = 6;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
   private ultimoMensajeStr: string = "";
   private menuAbierto: boolean = true;
 
-  constructor(palabra: string) {
-    this.palabra = palabra.toUpperCase();
+  static readonly palabrasDisponibles: string[] = [
+    "AGIL",
+    "CAMBIOS",
+    "PROYECTO",
+    "SPRINT",
+    "DAILY",
+    "ADAPTACION",
+    "KANBAN",
+    "SCRUM",
+    "LEAN",
+    "PLANNING",
+  ];
+
+  constructor(palabra?: string) {
+    if (palabra) {
+      this.palabra = palabra.toUpperCase();
+    } else {
+      // Nota: No es tan escalable porque solo esta pensado para 10 palabras. No se puede delegar en un metodo de instancia porque palabra, que es readonly, es solo accesible desde el constructor.
+      const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
+      this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
+    }
   }
 
   estasPerdido(): boolean {
@@ -91,5 +110,8 @@ export class Ahorcado {
   }
   tenesMenuAbierto(): boolean {
     return this.menuAbierto;
+  }
+  getPalabra(): string {
+    return this.palabra;
   }
 }
