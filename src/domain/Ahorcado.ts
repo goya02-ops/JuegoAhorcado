@@ -27,6 +27,8 @@ export class Ahorcado {
       const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
       this.menuAbierto = false;
+
+      // Aclaración: El menu abierto se pone en false porque se infiere que la partida comenzo por hacer click en jugar aleatoria.
     }
   }
 
