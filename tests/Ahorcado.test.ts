@@ -359,3 +359,11 @@ describe("Pruebas unitarias del AT 19 - Menu visible", () => {
     expect(juego.tenesMenuAbierto()).toBe(true);
   });
 });
+
+describe("Pruebas unitarias del AT 20 - Jugar partida con palabra aleatoria", () => {
+  it("crearAleatorio inicia un juego válido", () => {
+    const juego = Ahorcado.crearAleatorio();
+    expect(juego.vidas()).toBe(6);
+    expect(juego.palabraEnmascarada()).toMatch(/^[_A-Z ]+$/);
+  });
+});
