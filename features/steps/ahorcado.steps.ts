@@ -116,3 +116,20 @@ Then("se ve una palabra enmascarada", async ({ page }) => {
 Then("el menú de inicio no es visible", async ({ page }) => {
   await expect(page.getByTestId("menu-inicio")).not.toBeVisible();
 });
+
+// Agos - AT 21
+
+When(
+  "el jugador hace clic en el botón Jugar Personalizada",
+  async ({ page }) => {
+    await page.getByRole("button", { name: "Jugar Personalizada" }).click();
+  },
+);
+
+Then("se muestra un input para escribir la palabra", async ({ page }) => {
+  await expect(page.getByTestId("custom-word-input")).toBeVisible();
+});
+
+Then("un boton para confirmar", async ({ page }) => {
+  await expect(page.getByTestId("custom-word-btn")).toBeVisible();
+});

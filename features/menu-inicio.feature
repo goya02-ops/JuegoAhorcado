@@ -12,3 +12,8 @@ Característica: Menú de inicio
     Y se ven 6 vidas
     Y el menú de inicio no es visible
     
+  Escenario: El jugador elige jugar con palabra personalizada
+    Dado que el jugador abre el juego
+    Cuando el jugador hace clic en el botón Jugar Personalizada
+    Entonces se muestra un input para escribir la palabra
+    Y un boton para confirmar
