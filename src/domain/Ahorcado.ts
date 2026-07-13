@@ -26,9 +26,9 @@ export class Ahorcado {
       // Nota: No es tan escalable porque solo esta pensado para 10 palabras. No se puede delegar en un metodo de instancia porque palabra, que es readonly, es solo accesible desde el constructor.
       const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
-      this.menuAbierto = false;
+      this.cerrarMenu();
 
-      // Aclaración: El menu abierto se pone en false porque se infiere que la partida comenzo por hacer click en jugar aleatoria.
+      // Aclaración: Se cierra el menu porque se infiere que la partida comenzo por hacer click en jugar aleatoria.
     }
   }
 
