@@ -367,4 +367,8 @@ describe("Pruebas unitarias del AT 20 - Jugar partida con palabra aleatoria", ()
     expect(juego.palabraEnmascarada()).toMatch(/^[_A-Z ]+$/);
     expect(Ahorcado.palabrasDisponibles).toContain(juego.getPalabra());
   });
+  it("Al iniciar un juego aleatorio menuAbierto pasa a false", () => {
+    const juego = new Ahorcado();
+    expect(juego.tenesMenuAbierto()).toBe(false);
+  });
 });
