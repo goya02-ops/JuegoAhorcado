@@ -117,4 +117,7 @@ export class Ahorcado {
   getPalabra(): string {
     return this.palabra;
   }
+  cerrarMenu(): void {
+    this.menuAbierto = false;
+  }
 }
