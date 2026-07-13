@@ -76,6 +76,10 @@ export function mountApp(
   const btnRandom = document.createElement("button");
   btnRandom.className = "btn btn--primary";
   btnRandom.textContent = "Jugar Aleatoria";
+  btnRandom.addEventListener("click", () => {
+    juego = new Ahorcado();
+    render();
+  });
   menu.appendChild(btnRandom);
 
   const btnCustom = document.createElement("button");
@@ -201,6 +205,10 @@ export function mountApp(
       input.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = "";
+    } else if (!juego.tenesMenuAbierto()) {
+      overlay.style.display = "none";
+      input.disabled = false;
+      wordInput.disabled = false;
     } else {
       messageEl.textContent = juego.ultimoMensaje();
       input.disabled = false;

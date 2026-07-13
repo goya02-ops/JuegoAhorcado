@@ -7,7 +7,7 @@ Característica: Menú de inicio
 
   Escenario: El jugador elige jugar con palabra aleatoria
     Dado que el jugador abre el juego
-    Cuando el jugador hace clic en "Jugar Aleatoria"
+    Cuando el jugador hace clic en el botón Jugar Aleatoria
     Entonces se ve una palabra enmascarada
     Y se ven 6 vidas
     Y el menú de inicio no es visible
