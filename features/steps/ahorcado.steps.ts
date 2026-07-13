@@ -100,3 +100,19 @@ Given("que el jugador abre el juego", async ({ page }) => {
 Then("el menú de inicio es visible", async ({ page }) => {
   await expect(page.getByTestId("menu-inicio")).toBeVisible();
 });
+
+// Agos - AT 20
+
+When("el jugador hace clic en el botón Jugar Aleatoria", async ({ page }) => {
+  await page.getByRole("button", { name: "Jugar Aleatoria" }).click();
+});
+
+Then("se ve una palabra enmascarada", async ({ page }) => {
+  const texto = await page.getByTestId("word").textContent();
+  expect(texto).toMatch(/^[_A-Z ]+$/);
+  expect(texto).toContain("_");
+});
+
+Then("el menú de inicio no es visible", async ({ page }) => {
+  await expect(page.getByTestId("menu-inicio")).not.toBeVisible();
+});
