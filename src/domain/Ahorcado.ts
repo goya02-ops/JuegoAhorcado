@@ -1,12 +1,39 @@
 export class Ahorcado {
-  private readonly palabra: string;
+  private readonly palabra!: string;
   private vidasRestantes: number = 6;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
-  private ultimoMensajeStr: string = '';
+  private ultimoMensajeStr: string = "";
+  private menuAbierto: boolean = true;
 
-  constructor(palabra: string) {
-    this.palabra = palabra.toUpperCase();
+  static readonly palabrasDisponibles: string[] = [
+    "AGIL",
+    "CAMBIOS",
+    "PROYECTO",
+    "SPRINT",
+    "DAILY",
+    "ADAPTACION",
+    "KANBAN",
+    "SCRUM",
+    "LEAN",
+    "PLANNING",
+  ];
+
+  constructor(palabra?: string, esPalabraPersonalizada?: boolean) {
+    if (palabra && !esPalabraPersonalizada) {
+      this.palabra = palabra.toUpperCase();
+    } else if (palabra && esPalabraPersonalizada) {
+      this.palabra = palabra.toUpperCase();
+      this.cerrarMenu();
+      // Si se creo el juego por seleccionar palabra personalizada, se cierra el menu. Evita romper los AT previos al menu.
+    } else {
+      // Nota: No es tan escalable porque solo esta pensado para 10 palabras. No se puede delegar en un metodo de instancia porque palabra, que es readonly, es solo accesible desde el constructor.
+      const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
+      this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
+      this.cerrarMenu();
+
+      // Aclaración: Se cierra el menu porque se infiere que la partida comenzo por hacer click en jugar aleatoria.
+    }
   }
 
   estasPerdido(): boolean {
@@ -19,12 +46,12 @@ export class Ahorcado {
 
   palabraEnmascarada(): string {
     if (this.estasPerdido()) {
-      return this.palabra.split('').join(' ');
+      return this.palabra.split("").join(" ");
     }
     return this.palabra
-      .split('')
-      .map((letra) => (this.letrasAcertadas.has(letra) ? letra : '_'))
-      .join(' ');
+      .split("")
+      .map((letra) => (this.letrasAcertadas.has(letra) ? letra : "_"))
+      .join(" ");
   }
 
   adivinar(letra: string): void {
@@ -35,11 +62,11 @@ export class Ahorcado {
       return;
     }
     if (this.letrasIntentadas.has(letraUpper)) {
-      this.ultimoMensajeStr = 'Letra ya intentada';
+      this.ultimoMensajeStr = "Letra ya intentada";
       return;
     }
     this.letrasIntentadas.add(letraUpper);
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
     if (this.palabra.includes(letraUpper)) {
       this.letrasAcertadas.add(letraUpper);
     } else {
@@ -53,7 +80,7 @@ export class Ahorcado {
 
   estasGanado(): boolean {
     return this.palabra
-      .split('')
+      .split("")
       .every((letra) => this.letrasAcertadas.has(letra));
   }
 
@@ -65,7 +92,7 @@ export class Ahorcado {
     this.vidasRestantes = 6;
     this.letrasAcertadas = new Set();
     this.letrasIntentadas = new Set();
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
   }
 
   partesVisibles(): number {
@@ -76,7 +103,7 @@ export class Ahorcado {
     if (this.estaTerminado()) return;
 
     if (palabra.length <= 1) return;
-    this.ultimoMensajeStr = '';
+    this.ultimoMensajeStr = "";
 
     const palabraUpper = palabra.toUpperCase().trim();
 
@@ -87,5 +114,14 @@ export class Ahorcado {
     } else {
       this.vidasRestantes = 0;
     }
+  }
+  tenesMenuAbierto(): boolean {
+    return this.menuAbierto;
+  }
+  getPalabra(): string {
+    return this.palabra;
+  }
+  cerrarMenu(): void {
+    this.menuAbierto = false;
   }
 }

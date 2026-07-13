@@ -35,24 +35,6 @@ Then("se ven {int} vidas", async ({ page }, vidas: number) => {
   await expect(page.getByTestId("lives")).toHaveText(String(vidas));
 });
 
-// Agos
-
-When("el jugador adivina todas las letras", async ({ page }) => {
-  const url = new URL(page.url());
-  const palabra = url.searchParams.get("word")!;
-  const input = page.getByTestId("letter-input");
-  for (const letra of palabra) {
-    await input.fill(letra);
-    await input.press("Enter");
-  }
-});
-Then(
-  "se muestra el mensaje {string}",
-  async ({ page }, mensajeGanador: string) => {
-    await expect(page.getByTestId("message")).toHaveText(mensajeGanador);
-  },
-);
-
 When("el jugador falla todas las vidas", async ({ page }) => {
   const input = page.getByTestId("letter-input");
   for (const letra of ["B", "C", "D", "E", "F", "H"]) {
@@ -84,16 +66,85 @@ Then("no se muestra ningún mensaje", async ({ page }) => {
   await expect(page.getByTestId("message")).toHaveText("");
 });
 
+Then("la parte {string} es visible", async ({ page }, parte: string) => {
+  await expect(page.getByTestId(parte)).toBeVisible();
+});
+
+Then("la parte {string} no es visible", async ({ page }, parte: string) => {
+  await expect(page.getByTestId(parte)).not.toBeVisible();
+});
+
+// Agos - AT 4
+
+When("el jugador adivina todas las letras", async ({ page }) => {
+  const url = new URL(page.url());
+  const palabra = url.searchParams.get("word")!;
+  const input = page.getByTestId("letter-input");
+  for (const letra of palabra) {
+    await input.fill(letra);
+    await input.press("Enter");
+  }
+});
 Then(
-  "la parte {string} es visible",
-  async ({ page }, parte: string) => {
-    await expect(page.getByTestId(parte)).toBeVisible();
+  "se muestra el mensaje {string}",
+  async ({ page }, mensajeGanador: string) => {
+    await expect(page.getByTestId("message")).toHaveText(mensajeGanador);
   },
 );
 
-Then(
-  "la parte {string} no es visible",
-  async ({ page }, parte: string) => {
-    await expect(page.getByTestId(parte)).not.toBeVisible();
+// Agos - AT 19
+
+Given("que el jugador abre el juego", async ({ page }) => {
+  await page.goto("/");
+});
+Then("el menú de inicio es visible", async ({ page }) => {
+  await expect(page.getByTestId("menu-inicio")).toBeVisible();
+});
+
+// Agos - AT 20
+
+When("el jugador hace clic en el botón Jugar Aleatoria", async ({ page }) => {
+  await page.getByRole("button", { name: "Jugar Aleatoria" }).click();
+});
+
+Then("se ve una palabra enmascarada", async ({ page }) => {
+  const texto = await page.getByTestId("word").textContent();
+  expect(texto).toMatch(/^[_A-Z ]+$/);
+  expect(texto).toContain("_");
+});
+
+Then("el menú de inicio no es visible", async ({ page }) => {
+  await expect(page.getByTestId("menu-inicio")).not.toBeVisible();
+});
+
+// Agos - AT 21
+
+When(
+  "el jugador hace clic en el botón Jugar Personalizada",
+  async ({ page }) => {
+    await page.getByRole("button", { name: "Jugar Personalizada" }).click();
   },
 );
+
+Then("se muestra un input para escribir la palabra", async ({ page }) => {
+  await expect(page.getByTestId("custom-word-input")).toBeVisible();
+});
+
+Then("un boton para confirmar", async ({ page }) => {
+  await expect(page.getByTestId("custom-word-btn")).toBeVisible();
+});
+
+// AT 22
+
+Given("que el jugador está en el formulario de palabra personalizada", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Jugar Personalizada" }).click();
+});
+
+When("el jugador escribe {string} en el input de palabra personalizada", async ({ page }, palabra: string) => {
+  await page.getByTestId("custom-word-input").fill(palabra);
+});
+
+When("el jugador confirma la palabra personalizada", async ({ page }) => {
+  await page.getByTestId("custom-word-btn").click();
+});
