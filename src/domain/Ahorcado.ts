@@ -19,9 +19,13 @@ export class Ahorcado {
     "PLANNING",
   ];
 
-  constructor(palabra?: string) {
-    if (palabra) {
+  constructor(palabra?: string, esPalabraPersonalizada?: boolean) {
+    if (palabra && !esPalabraPersonalizada) {
       this.palabra = palabra.toUpperCase();
+    } else if (palabra && esPalabraPersonalizada) {
+      this.palabra = palabra.toUpperCase();
+      this.cerrarMenu();
+      // Si se creo el juego por seleccionar palabra personalizada, se cierra el menu. Evita romper los AT previos al menu.
     } else {
       // Nota: No es tan escalable porque solo esta pensado para 10 palabras. No se puede delegar en un metodo de instancia porque palabra, que es readonly, es solo accesible desde el constructor.
       const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
