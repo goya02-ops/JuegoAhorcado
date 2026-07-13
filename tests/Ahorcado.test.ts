@@ -379,4 +379,8 @@ describe("Pruebas unitarias del AT 22 - Confirmar palabra personalizada", () => 
     juego.cerrarMenu();
     expect(juego.tenesMenuAbierto()).toBe(false);
   });
+  it("Iniciar un juego por confirmar palabra personalizada deberia cerrar el menu", () => {
+    const juego = new Ahorcado("GATO", true);
+    expect(juego.tenesMenuAbierto()).toBe(false);
+  });
 });
