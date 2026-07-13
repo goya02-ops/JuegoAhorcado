@@ -102,7 +102,7 @@ export function mountApp(
     customBtn.textContent = "Jugar";
 
     customBtn.addEventListener("click", () => {
-      juego = new Ahorcado(customInput.value);
+      juego = new Ahorcado(customInput.value, true);
       render();
     });
 
