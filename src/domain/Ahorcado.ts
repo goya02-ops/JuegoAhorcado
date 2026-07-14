@@ -30,11 +30,9 @@ export class Ahorcado {
   ];
 
   constructor(palabra?: string, esPalabraPersonalizada?: boolean) {
-    if (palabra && !esPalabraPersonalizada) {
+    if (palabra) {
       this.palabra = normalizar(palabra);
-    } else if (palabra && esPalabraPersonalizada) {
-      this.palabra = normalizar(palabra);
-      this.cerrarMenu();
+      if (esPalabraPersonalizada) this.cerrarMenu();
     } else {
       const numeroAleatorio = Math.floor(Math.random() * 10);
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
