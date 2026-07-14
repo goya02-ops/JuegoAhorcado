@@ -95,6 +95,19 @@ export function mountApp(
     customInput.setAttribute("data-testid", "custom-word-input");
     customInput.className = "input";
     customInput.placeholder = "Escribí tu palabra";
+    customInput.addEventListener("input", () => {
+      const limpio = customInput.value
+        .toUpperCase()
+        .replace(/[^A-ZÑÁÉÍÓÚ]/g, "");
+      if (limpio !== customInput.value) {
+        const pos = customInput.selectionStart;
+        const removidos = customInput.value.length - limpio.length;
+        customInput.value = limpio;
+        if (pos !== null) {
+          customInput.setSelectionRange(Math.max(0, pos - removidos), Math.max(0, pos - removidos));
+        }
+      }
+    });
 
     const customBtn = document.createElement("button");
     customBtn.setAttribute("data-testid", "custom-word-btn");
