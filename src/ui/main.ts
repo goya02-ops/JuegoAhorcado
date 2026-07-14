@@ -101,9 +101,10 @@ export function mountApp(
         .replace(/[^A-ZÑÁÉÍÓÚ]/g, "");
       if (limpio !== customInput.value) {
         const pos = customInput.selectionStart;
+        const removidos = customInput.value.length - limpio.length;
         customInput.value = limpio;
         if (pos !== null) {
-          customInput.setSelectionRange(pos - 1, pos - 1);
+          customInput.setSelectionRange(pos - removidos, pos - removidos);
         }
       }
     });
