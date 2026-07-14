@@ -340,9 +340,9 @@ describe("Pruebas unitarias del Acceptance Test 12 - Ñ y acentos", () => {
   it("la letra Ñ es válida y distinta de N", () => {
     const juego = new Ahorcado("ESPAÑOL");
     juego.adivinar("Ñ");
-    expect(juego.palabraEnmascarada()).toBe("_ _ _ Ñ _ _ _");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _ Ñ _ _");
     juego.adivinar("N");
-    expect(juego.palabraEnmascarada()).toBe("_ _ _ Ñ _ _ _");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _ Ñ _ _");
   });
 
   it("palabra con acentos normalizada se juega correctamente letra por letra", () => {

@@ -1,3 +1,13 @@
+function normalizar(texto: string): string {
+  return texto
+    .toUpperCase()
+    .replace(/Á/g, "A")
+    .replace(/É/g, "E")
+    .replace(/Í/g, "I")
+    .replace(/Ó/g, "O")
+    .replace(/Ú/g, "U");
+}
+
 export class Ahorcado {
   private readonly palabra!: string;
   private vidasRestantes: number = 6;
@@ -21,18 +31,14 @@ export class Ahorcado {
 
   constructor(palabra?: string, esPalabraPersonalizada?: boolean) {
     if (palabra && !esPalabraPersonalizada) {
-      this.palabra = palabra.toUpperCase();
+      this.palabra = normalizar(palabra);
     } else if (palabra && esPalabraPersonalizada) {
-      this.palabra = palabra.toUpperCase();
+      this.palabra = normalizar(palabra);
       this.cerrarMenu();
-      // Si se creo el juego por seleccionar palabra personalizada, se cierra el menu. Evita romper los AT previos al menu.
     } else {
-      // Nota: No es tan escalable porque solo esta pensado para 10 palabras. No se puede delegar en un metodo de instancia porque palabra, que es readonly, es solo accesible desde el constructor.
-      const numeroAleatorio = Math.floor(Math.random() * 10); // Numero aleatorio entre 0 y 9
+      const numeroAleatorio = Math.floor(Math.random() * 10);
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
       this.cerrarMenu();
-
-      // Aclaración: Se cierra el menu porque se infiere que la partida comenzo por hacer click en jugar aleatoria.
     }
   }
 
@@ -55,20 +61,20 @@ export class Ahorcado {
   }
 
   adivinar(letra: string): void {
-    const letraUpper = letra.toUpperCase();
-    if (letraUpper.length !== 1) return;
-    if (!/^[A-Z]$/.test(letraUpper)) return;
+    const letraNormalizada = normalizar(letra);
+    if (letraNormalizada.length !== 1) return;
+    if (!/^[A-ZÑ]$/.test(letraNormalizada)) return;
     if (this.estaTerminado()) {
       return;
     }
-    if (this.letrasIntentadas.has(letraUpper)) {
+    if (this.letrasIntentadas.has(letraNormalizada)) {
       this.ultimoMensajeStr = "Letra ya intentada";
       return;
     }
-    this.letrasIntentadas.add(letraUpper);
+    this.letrasIntentadas.add(letraNormalizada);
     this.ultimoMensajeStr = "";
-    if (this.palabra.includes(letraUpper)) {
-      this.letrasAcertadas.add(letraUpper);
+    if (this.palabra.includes(letraNormalizada)) {
+      this.letrasAcertadas.add(letraNormalizada);
     } else {
       this.vidasRestantes--;
     }
@@ -105,9 +111,9 @@ export class Ahorcado {
     if (palabra.length <= 1) return;
     this.ultimoMensajeStr = "";
 
-    const palabraUpper = palabra.toUpperCase().trim();
+    const palabraNormalizada = normalizar(palabra.trim());
 
-    if (palabraUpper === this.palabra) {
+    if (palabraNormalizada === this.palabra) {
       for (const letra of this.palabra) {
         this.letrasAcertadas.add(letra);
       }

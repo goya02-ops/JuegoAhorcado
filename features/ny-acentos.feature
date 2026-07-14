@@ -9,9 +9,9 @@ Característica: Ñ y acentos
   Escenario: La letra Ñ es válida en el juego
     Dado una partida con la palabra "ESPAÑOL"
     Cuando el jugador adivina la letra "Ñ"
-    Entonces se ve la palabra "_ _ _ Ñ _ _ _"
+    Entonces se ve la palabra "_ _ _ _ Ñ _ _"
 
   Escenario: Palabra con acentos se normaliza internamente
     Dado una partida con la palabra "CORAZÓN"
     Cuando el jugador adivina la letra "O"
-    Entonces se ve la palabra "O _ _ _ _ O _"
+    Entonces se ve la palabra "_ O _ _ _ O _"
