@@ -1,12 +1,10 @@
+const ACENTOS: Record<string, string> = { Á: "A", É: "E", Í: "I", Ó: "O", Ú: "U" };
+
 function normalizar(texto: string): string {
   return texto
     .toUpperCase()
-    .replace(/Á/g, "A")
-    .replace(/É/g, "E")
-    .replace(/Í/g, "I")
-    .replace(/Ó/g, "O")
-    .replace(/Ú/g, "U")
-    .replace(/[^A-ZÑ]/g, "");
+    .replace(/[ÁÉÍÓÚ]/gu, (c) => ACENTOS[c])
+    .replace(/[^A-ZÑ]/gu, "");
 }
 
 export class Ahorcado {

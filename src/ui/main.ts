@@ -104,7 +104,7 @@ export function mountApp(
         const removidos = customInput.value.length - limpio.length;
         customInput.value = limpio;
         if (pos !== null) {
-          customInput.setSelectionRange(pos - removidos, pos - removidos);
+          customInput.setSelectionRange(Math.max(0, pos - removidos), Math.max(0, pos - removidos));
         }
       }
     });
