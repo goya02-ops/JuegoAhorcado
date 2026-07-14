@@ -324,6 +324,41 @@ describe("Pruebas unitarias del Acceptance Test 11 - Adivinar palabra completa",
   });
 });
 
+describe("Pruebas unitarias del Acceptance Test 12 - Ñ y acentos", () => {
+  it("palabra con acentos se normaliza al crearla", () => {
+    const juego = new Ahorcado("CORAZÓN");
+    expect(juego.getPalabra()).toBe("CORAZON");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _ _ _ _");
+  });
+
+  it("adivinar con letra acentuada equivale a la misma sin acento", () => {
+    const juego = new Ahorcado("CASA");
+    juego.adivinar("Á");
+    expect(juego.palabraEnmascarada()).toBe("_ A _ A");
+  });
+
+  it("la letra Ñ es válida y distinta de N", () => {
+    const juego = new Ahorcado("ESPAÑOL");
+    juego.adivinar("Ñ");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ Ñ _ _ _");
+    juego.adivinar("N");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ Ñ _ _ _");
+  });
+
+  it("palabra con acentos normalizada se juega correctamente letra por letra", () => {
+    const juego = new Ahorcado("MURCIÉLAGO");
+    expect(juego.getPalabra()).toBe("MURCIELAGO");
+    juego.adivinar("E");
+    expect(juego.palabraEnmascarada()).toBe("_ _ _ _ _ E _ _ _ _");
+  });
+
+  it("adivinarPalabra normaliza acentos en entrada y almacenamiento", () => {
+    const juego = new Ahorcado("CORAZÓN");
+    juego.adivinarPalabra("CORAZON");
+    expect(juego.estasGanado()).toBe(true);
+  });
+});
+
 describe("Bug: metodo duplicado estaPerdido", () => {
   it("estaTerminado devuelve true despues de perder", () => {
     const juego = new Ahorcado("GATO");
