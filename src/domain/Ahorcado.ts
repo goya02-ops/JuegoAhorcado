@@ -5,7 +5,8 @@ function normalizar(texto: string): string {
     .replace(/É/g, "E")
     .replace(/Í/g, "I")
     .replace(/Ó/g, "O")
-    .replace(/Ú/g, "U");
+    .replace(/Ú/g, "U")
+    .replace(/[^A-ZÑ]/g, "");
 }
 
 export class Ahorcado {

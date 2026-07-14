@@ -1,5 +1,5 @@
 # language: es
-Funcionalidad: Caracteres no válidos en palabra personalizada
+Característica: Caracteres no válidos en palabra personalizada
   Como jugador
   Quiero que los números y símbolos sean eliminados al crear una palabra personalizada
   Para que la partida solo tenga letras válidas
