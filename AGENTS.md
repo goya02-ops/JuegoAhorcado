@@ -34,7 +34,7 @@ src/
   index.ts              ← composition root (lee ?word=, crea Ahorcado, mountea UI)
   domain/Ahorcado.ts    ← lógica pura (sin DOM/I/O)
   ui/main.ts            ← consume Ahorcado, mountea UI con data-testid
-features/              ← 7 .feature + steps/ahorcado.steps.ts
+features/              ← 14 .feature + steps/ahorcado.steps.ts
 tests/Ahorcado.test.ts ← UTs del dominio (Vitest)
 ```
 
@@ -46,10 +46,15 @@ Palabra normalizada a mayúsculas. Vidas iniciales: 6.
 |---|---|
 | `palabraEnmascarada()` | string con espacios (ej. `"_ A _ _"`) |
 | `adivinar(letra)` | void — descuenta vida si falla; ignora repetidas, inválidas y juego terminado |
+| `adivinarPalabra(palabra)` | void — adivina palabra completa; acierto = todas letras, fallo = 0 vidas |
 | `vidas()` | número |
 | `estasGanado()` / `estasPerdido()` | boolean |
 | `estaTerminado()` | boolean |
 | `ultimoMensaje()` | `""` o `"Letra ya intentada"` |
+| `partesVisibles()` | número (0–6) — cuántas partes del dibujo se ven |
+| `reiniciar()` | void — resetea vidas, letras y mensaje |
+| `getPalabra()` | string — palabra normalizada (para ATs que leen la URL) |
+| `tenesMenuAbierto()` / `cerrarMenu()` | boolean / void — control del menú de inicio |
 
 ## Reglas de dependencia
 
@@ -65,12 +70,6 @@ La palabra secreta se inyecta por URL: `/?word=GATO`. Default si no viene: `"AHO
 
 Prefijos obligatorios: `RED:` (test fallando), `GREEN:` (código que lo pasa), `REFACTOR:` (opcional). Los RED van localmente como ancestros de GREEN. Solo se pushea con el tope en verde.
 
-## Bug conocido
-
-El dominio tiene dos métodos duplicados con el mismo cuerpo:
-`estasPerdido()` (línea 12, usado por UI y tests) y `estaPerdido()` (línea 60,
-nunca llamado). Corregir aplicando TDD.
-
 ## ATs (Playwright)
 
 - `bddgen` (corrido por `pnpm at`) genera specs en `.features-gen/` (`.gitignore`d)
@@ -81,5 +80,6 @@ nunca llamado). Corregir aplicando TDD.
 ## Notas
 
 - No hay `tsconfig.json` — se usan defaults de Vite
-- Los UTs usan `environment: "node"` (sin jsdom/DOM)
+- `packageManager` en `package.json`: `pnpm@10.20.0`
+- Vitest global: `environment: "node"`, pero `tests/main.test.ts` override con `// @vitest-environment jsdom` para tests de UI
 - Los `.env`/`.env.local` contienen tokens (SonarQube, Vercel). Ya ignorados en `.gitignore`, pero no exponerlos.
