@@ -357,6 +357,16 @@ describe("Pruebas unitarias del Acceptance Test 12 - Ñ y acentos", () => {
     juego.adivinarPalabra("CORAZON");
     expect(juego.estasGanado()).toBe(true);
   });
+
+  it("palabra con números se sanitiza al crearla", () => {
+    const juego = new Ahorcado("C4S4");
+    expect(juego.getPalabra()).toBe("CS");
+  });
+
+  it("palabra con símbolos se sanitiza al crearla", () => {
+    const juego = new Ahorcado("HO-LA!");
+    expect(juego.getPalabra()).toBe("HOLA");
+  });
 });
 
 describe("Bug: metodo duplicado estaPerdido", () => {
