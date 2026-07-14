@@ -48,6 +48,7 @@ export function mountApp(
   juego: Ahorcado,
   opciones: { mostrarMenu: boolean } = { mostrarMenu: true },
 ): void {
+  let juegoActual = juego;
   const appEl = document.createElement("div");
   appEl.className = "game";
 
@@ -77,7 +78,7 @@ export function mountApp(
   btnRandom.className = "btn btn--primary";
   btnRandom.textContent = "Jugar Aleatoria";
   btnRandom.addEventListener("click", () => {
-    juego = new Ahorcado();
+    juegoActual = new Ahorcado();
     render();
   });
   menu.appendChild(btnRandom);
@@ -115,7 +116,7 @@ export function mountApp(
     customBtn.textContent = "Jugar";
 
     customBtn.addEventListener("click", () => {
-      juego = new Ahorcado(customInput.value, true);
+      juegoActual = new Ahorcado(customInput.value, true);
       render();
     });
 
@@ -172,7 +173,7 @@ export function mountApp(
   input.placeholder = "A";
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      juego.adivinar(input.value);
+      juegoActual.adivinar(input.value);
       input.value = "";
       render();
     }
@@ -195,7 +196,7 @@ export function mountApp(
   guessBtn.textContent = "Adivinar";
 
   const procesarPalabra = (): void => {
-    juego.adivinarPalabra(wordInput.value);
+    juegoActual.adivinarPalabra(wordInput.value);
     wordInput.value = "";
     render();
   };
@@ -215,7 +216,7 @@ export function mountApp(
   restartBtn.className = "btn restart-btn";
   restartBtn.textContent = "Jugar de Nuevo";
   restartBtn.addEventListener("click", () => {
-    juego.reiniciar();
+    juegoActual.reiniciar();
     render();
   });
   rightCol.appendChild(restartBtn);
@@ -224,35 +225,35 @@ export function mountApp(
   appEl.appendChild(columns);
 
   function render(): void {
-    wordEl.textContent = juego.palabraEnmascarada();
-    livesEl.textContent = String(juego.vidas());
+    wordEl.textContent = juegoActual.palabraEnmascarada();
+    livesEl.textContent = String(juegoActual.vidas());
 
     messageEl.className = "message";
     restartBtn.style.display = "none";
 
-    if (juego.estasGanado()) {
+    if (juegoActual.estasGanado()) {
       messageEl.textContent = "Ganaste";
       messageEl.classList.add("message--success");
       input.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = "";
-    } else if (juego.estasPerdido()) {
+    } else if (juegoActual.estasPerdido()) {
       messageEl.textContent = "Perdiste";
       messageEl.classList.add("message--error");
       input.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = "";
-    } else if (!juego.tenesMenuAbierto()) {
+    } else if (!juegoActual.tenesMenuAbierto()) {
       overlay.style.display = "none";
       input.disabled = false;
       wordInput.disabled = false;
     } else {
-      messageEl.textContent = juego.ultimoMensaje();
+      messageEl.textContent = juegoActual.ultimoMensaje();
       input.disabled = false;
       wordInput.disabled = false;
     }
 
-    const visibles = juego.partesVisibles();
+    const visibles = juegoActual.partesVisibles();
     for (let i = 0; i < PARTES.length; i++) {
       parteEls[PARTES[i]].style.display = i < visibles ? "" : "none";
     }
