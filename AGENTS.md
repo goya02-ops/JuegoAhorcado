@@ -13,17 +13,10 @@ Repo universitario: ATDD del Ahorcado en TypeScript. Antes de tocar código, lee
 
 No hay linter ni typechecker — Vite maneja TS en tiempo de build. Usar solo `pnpm` localmente; CI usa `npm`.
 
-## CI/CD (GitHub Actions)
+## CI/CD
 
-CI se dispara sobre `main` y `develop` (push y PR). `ubuntu-latest`, Node 24, usa **npm**.
-Secuencia: `npm ci` → `npm run build` → `npm test -- --coverage` →
-`vitest-coverage-report-action` → SonarQube scan (solo `main`) →
-`npx playwright install chromium --with-deps` → `npm run at`.
-Sube `test-results/`, `playwright-report/`, `coverage/` como artifact.
-
-CD: job `deploy` a Vercel solo desde `main` (push), después de que pase `test`.
-Requiere los secrets `VERCEL_TOKEN`, `VERCEL_ORG_ID` y `VERCEL_PROJECT_ID` en GitHub.
-Config en `vercel.json`.
+CI corre en `main` y `develop`. Usa **npm** (no pnpm). Solo se pushea cuando está verde.
+SonarQube solo en `main`. Deploy a Vercel desde `main` después de pasar tests.
 
 El repo tiene ambos lockfiles: `package-lock.json` (CI) y `pnpm-lock.yaml` (local).
 
@@ -35,7 +28,10 @@ src/
   domain/Ahorcado.ts    ← lógica pura (sin DOM/I/O)
   ui/main.ts            ← consume Ahorcado, mountea UI con data-testid
 features/              ← 14 .feature + steps/ahorcado.steps.ts
-tests/Ahorcado.test.ts ← UTs del dominio (Vitest)
+tests/
+  Ahorcado.test.ts  ← UTs del dominio
+  main.test.ts      ← tests de UI (jsdom)
+  index.test.ts     ← tests de composition root (jsdom)
 ```
 
 ## API del dominio (`Ahorcado`)
@@ -81,5 +77,5 @@ Prefijos obligatorios: `RED:` (test fallando), `GREEN:` (código que lo pasa), `
 
 - No hay `tsconfig.json` — se usan defaults de Vite
 - `packageManager` en `package.json`: `pnpm@10.20.0`
-- Vitest global: `environment: "node"`, pero `tests/main.test.ts` override con `// @vitest-environment jsdom` para tests de UI
+- Vitest global: `environment: "node"`, pero `tests/main.test.ts` e `tests/index.test.ts` usan `// @vitest-environment jsdom`
 - Los `.env`/`.env.local` contienen tokens (SonarQube, Vercel). Ya ignorados en `.gitignore`, pero no exponerlos.
