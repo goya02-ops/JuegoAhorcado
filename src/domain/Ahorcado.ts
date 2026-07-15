@@ -1,4 +1,10 @@
-const ACENTOS: Record<string, string> = { Á: "A", É: "E", Í: "I", Ó: "O", Ú: "U" };
+const ACENTOS: Record<string, string> = {
+  Á: "A",
+  É: "E",
+  Í: "I",
+  Ó: "O",
+  Ú: "U",
+};
 
 function normalizar(texto: string): string {
   return texto
@@ -8,7 +14,7 @@ function normalizar(texto: string): string {
 }
 
 export class Ahorcado {
-  private readonly palabra!: string;
+  private readonly palabra: string;
   private vidasRestantes: number = Ahorcado.VIDAS_INICIALES;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
@@ -35,7 +41,9 @@ export class Ahorcado {
       this.palabra = normalizar(palabra);
       if (esPalabraPersonalizada) this.cerrarMenu();
     } else {
-      const numeroAleatorio = Math.floor(Math.random() * Ahorcado.palabrasDisponibles.length);
+      const numeroAleatorio = Math.floor(
+        Math.random() * Ahorcado.palabrasDisponibles.length,
+      );
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
       this.cerrarMenu();
     }
