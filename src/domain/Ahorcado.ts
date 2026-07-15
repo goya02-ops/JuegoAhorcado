@@ -9,11 +9,13 @@ function normalizar(texto: string): string {
 
 export class Ahorcado {
   private readonly palabra!: string;
-  private vidasRestantes: number = 6;
+  private vidasRestantes: number = Ahorcado.VIDAS_INICIALES;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
   private ultimoMensajeStr: string = "";
   private menuAbierto: boolean = true;
+
+  static readonly VIDAS_INICIALES = 6;
 
   static readonly palabrasDisponibles: string[] = [
     "AGIL",
@@ -92,14 +94,14 @@ export class Ahorcado {
   }
 
   reiniciar(): void {
-    this.vidasRestantes = 6;
+    this.vidasRestantes = Ahorcado.VIDAS_INICIALES;
     this.letrasAcertadas = new Set();
     this.letrasIntentadas = new Set();
     this.ultimoMensajeStr = "";
   }
 
   partesVisibles(): number {
-    return 6 - this.vidasRestantes;
+    return Ahorcado.VIDAS_INICIALES - this.vidasRestantes;
   }
 
   adivinarPalabra(palabra: string): void {
