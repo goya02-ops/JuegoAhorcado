@@ -17,6 +17,11 @@ const GALOWS_CLASSES = [
   "hangman__gallows hangman__gallows--rope",
 ];
 
+interface GameState {
+  getJuego: () => Ahorcado;
+  setJuego: (j: Ahorcado) => void;
+}
+
 function createHangman(): {
   container: HTMLElement;
   parteEls: Record<string, HTMLElement>;
@@ -43,21 +48,10 @@ function createHangman(): {
   return { container, parteEls };
 }
 
-export function mountApp(
-  container: HTMLElement,
-  juego: Ahorcado,
-  opciones?: { mostrarMenu: boolean },
-): void {
-  let juegoActual = juego;
-  const mostrarMenu = opciones?.mostrarMenu ?? true;
-  const appEl = document.createElement("div");
-  appEl.className = "game";
-
-  const header = document.createElement("h1");
-  header.className = "header";
-  header.textContent = "AHORCADO";
-  appEl.appendChild(header);
-
+function createMenu(
+  state: GameState,
+  render: () => void,
+): { overlay: HTMLElement; ocultarMenu: () => void } {
   const overlay = document.createElement("div");
   overlay.className = "overlay";
 
@@ -79,7 +73,7 @@ export function mountApp(
   btnRandom.className = "btn btn--primary";
   btnRandom.textContent = "Jugar Aleatoria";
   btnRandom.addEventListener("click", () => {
-    juegoActual = new Ahorcado();
+    state.setJuego(new Ahorcado());
     render();
   });
   menu.appendChild(btnRandom);
@@ -93,7 +87,7 @@ export function mountApp(
     subtitulo.style.display = "none";
 
     const customInput = document.createElement("input");
-    customInput.setAttribute("type", "text");
+    customInput.type = "text";
     customInput.dataset.testid = "custom-word-input";
     customInput.className = "input";
     customInput.placeholder = "Escribí tu palabra";
@@ -106,7 +100,10 @@ export function mountApp(
         const removidos = customInput.value.length - limpio.length;
         customInput.value = limpio;
         if (pos !== null) {
-          customInput.setSelectionRange(Math.max(0, pos - removidos), Math.max(0, pos - removidos));
+          customInput.setSelectionRange(
+            Math.max(0, pos - removidos),
+            Math.max(0, pos - removidos),
+          );
         }
       }
     });
@@ -117,7 +114,7 @@ export function mountApp(
     customBtn.textContent = "Jugar";
 
     customBtn.addEventListener("click", () => {
-      juegoActual = new Ahorcado(customInput.value, true);
+      state.setJuego(new Ahorcado(customInput.value, true));
       render();
     });
 
@@ -129,11 +126,27 @@ export function mountApp(
   overlay.appendChild(menu);
   document.body.appendChild(overlay);
 
-  if (!mostrarMenu) {
-    // Esto es para que pasen los acceptance test anteriores al 19.
-    overlay.style.display = "none";
-  }
+  return {
+    overlay,
+    ocultarMenu: () => {
+      overlay.style.display = "none";
+    },
+  };
+}
 
+function createGamePanel(
+  state: GameState,
+  render: () => void,
+): {
+  columns: HTMLElement;
+  wordEl: HTMLElement;
+  livesEl: HTMLElement;
+  messageEl: HTMLElement;
+  letterInput: HTMLInputElement;
+  wordInput: HTMLInputElement;
+  restartBtn: HTMLButtonElement;
+  parteEls: Record<string, HTMLElement>;
+} {
   const columns = document.createElement("div");
   columns.className = "columns";
 
@@ -166,20 +179,20 @@ export function mountApp(
   const letterRow = document.createElement("div");
   letterRow.className = "input-row";
 
-  const input = document.createElement("input");
-  input.setAttribute("type", "text");
-  input.dataset.testid = "letter-input";
-  input.className = "input letter-input";
-  input.maxLength = 1;
-  input.placeholder = "A";
-  input.addEventListener("keydown", (e) => {
+  const letterInput = document.createElement("input");
+  letterInput.type = "text";
+  letterInput.dataset.testid = "letter-input";
+  letterInput.className = "input letter-input";
+  letterInput.maxLength = 1;
+  letterInput.placeholder = "A";
+  letterInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
-      juegoActual.adivinar(input.value);
-      input.value = "";
+      state.getJuego().adivinar(letterInput.value);
+      letterInput.value = "";
       render();
     }
   });
-  letterRow.appendChild(input);
+  letterRow.appendChild(letterInput);
   rightCol.appendChild(letterRow);
 
   const wordRow = document.createElement("div");
@@ -197,7 +210,7 @@ export function mountApp(
   guessBtn.textContent = "Adivinar";
 
   const procesarPalabra = (): void => {
-    juegoActual.adivinarPalabra(wordInput.value);
+    state.getJuego().adivinarPalabra(wordInput.value);
     wordInput.value = "";
     render();
   };
@@ -217,12 +230,58 @@ export function mountApp(
   restartBtn.className = "btn restart-btn";
   restartBtn.textContent = "Jugar de Nuevo";
   restartBtn.addEventListener("click", () => {
-    juegoActual.reiniciar();
+    state.getJuego().reiniciar();
     render();
   });
   rightCol.appendChild(restartBtn);
 
   columns.appendChild(rightCol);
+
+  return {
+    columns,
+    wordEl,
+    livesEl,
+    messageEl,
+    letterInput,
+    wordInput,
+    restartBtn,
+    parteEls,
+  };
+}
+
+export function mountApp(
+  container: HTMLElement,
+  juego: Ahorcado,
+  opciones?: { mostrarMenu: boolean },
+): void {
+  let juegoActual = juego;
+  const state: GameState = {
+    getJuego: () => juegoActual,
+    setJuego: (j) => {
+      juegoActual = j;
+    },
+  };
+
+  const appEl = document.createElement("div");
+  appEl.className = "game";
+
+  const header = document.createElement("h1");
+  header.className = "header";
+  header.textContent = "AHORCADO";
+  appEl.appendChild(header);
+
+  const { overlay, ocultarMenu } = createMenu(state, render);
+  const {
+    columns,
+    wordEl,
+    livesEl,
+    messageEl,
+    letterInput,
+    wordInput,
+    restartBtn,
+    parteEls,
+  } = createGamePanel(state, render);
+
   appEl.appendChild(columns);
 
   function render(): void {
@@ -235,22 +294,22 @@ export function mountApp(
     if (juegoActual.estasGanado()) {
       messageEl.textContent = "Ganaste";
       messageEl.classList.add("message--success");
-      input.disabled = true;
+      letterInput.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = "";
     } else if (juegoActual.estasPerdido()) {
       messageEl.textContent = "Perdiste";
       messageEl.classList.add("message--error");
-      input.disabled = true;
+      letterInput.disabled = true;
       wordInput.disabled = true;
       restartBtn.style.display = "";
     } else if (!juegoActual.tenesMenuAbierto()) {
       overlay.style.display = "none";
-      input.disabled = false;
+      letterInput.disabled = false;
       wordInput.disabled = false;
     } else {
       messageEl.textContent = juegoActual.ultimoMensaje();
-      input.disabled = false;
+      letterInput.disabled = false;
       wordInput.disabled = false;
     }
 
@@ -260,7 +319,11 @@ export function mountApp(
     }
   }
 
+  const mostrarMenu = opciones?.mostrarMenu ?? true;
+  if (!mostrarMenu) {
+    ocultarMenu();
+  }
+
   render();
   container.appendChild(appEl);
 }
-// e

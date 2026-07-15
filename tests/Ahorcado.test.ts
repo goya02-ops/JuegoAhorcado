@@ -361,7 +361,7 @@ describe("Pruebas unitarias del Acceptance Test 12 - Ñ y acentos", () => {
   });
 });
 
-describe("Bug: metodo duplicado estaPerdido", () => {
+describe("pruebas del método estaTerminado", () => {
   it("estaTerminado devuelve true despues de perder", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("B");
@@ -387,8 +387,6 @@ describe("Bug: metodo duplicado estaPerdido", () => {
     expect(juego.estaTerminado()).toBe(false);
   });
 });
-
-// Agos
 
 describe("Pruebas unitarias del AT 19 - Menu visible", () => {
   it("arranca el juego con estado menuAbierto verdadero", () => {
