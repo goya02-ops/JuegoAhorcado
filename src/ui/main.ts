@@ -49,6 +49,7 @@ export function mountApp(
   opciones?: { mostrarMenu: boolean },
 ): void {
   let juegoActual = juego;
+  const mostrarMenu = opciones?.mostrarMenu ?? true;
   const appEl = document.createElement("div");
   appEl.className = "game";
 
