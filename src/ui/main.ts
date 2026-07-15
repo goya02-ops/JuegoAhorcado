@@ -46,8 +46,9 @@ function createHangman(): {
 export function mountApp(
   container: HTMLElement,
   juego: Ahorcado,
-  opciones: { mostrarMenu: boolean } = { mostrarMenu: true },
+  opciones?: { mostrarMenu: boolean },
 ): void {
+  const mostrarMenu = opciones?.mostrarMenu ?? true;
   const appEl = document.createElement("div");
   appEl.className = "game";
 
@@ -127,7 +128,7 @@ export function mountApp(
   overlay.appendChild(menu);
   document.body.appendChild(overlay);
 
-  if (!opciones.mostrarMenu) {
+  if (!mostrarMenu) {
     // Esto es para que pasen los acceptance test anteriores al 19.
     overlay.style.display = "none";
   }
