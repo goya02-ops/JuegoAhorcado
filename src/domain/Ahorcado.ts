@@ -14,14 +14,14 @@ function normalizar(texto: string): string {
 }
 
 export class Ahorcado {
+  static readonly VIDAS_INICIALES = 6;
+
   private readonly palabra: string;
   private vidasRestantes: number = Ahorcado.VIDAS_INICIALES;
   private letrasAcertadas: Set<string> = new Set();
   private letrasIntentadas: Set<string> = new Set();
   private ultimoMensajeStr: string = "";
   private menuAbierto: boolean = true;
-
-  static readonly VIDAS_INICIALES = 6;
 
   static readonly palabrasDisponibles: string[] = [
     "AGIL",
