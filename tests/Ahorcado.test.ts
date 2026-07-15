@@ -12,22 +12,20 @@ describe("Ahorcado", () => {
     expect(juego.vidas()).toBe(6);
   });
 
-  it("revela la letra acertada en la palabra enmascarada", () => {
+  it.each([
+    ["revela la letra acertada en la palabra enmascarada", "A", "_ A _ _"],
+    ["es case-insensitive al adivinar", "a", "_ A _ _"],
+    ["la palabra no cambia al fallar", "E", "_ _ _ _"],
+  ])("%s", (_, letra, esperado) => {
     const juego = new Ahorcado("GATO");
-    juego.adivinar("A");
-    expect(juego.palabraEnmascarada()).toBe("_ A _ _");
+    juego.adivinar(letra);
+    expect(juego.palabraEnmascarada()).toBe(esperado);
   });
 
   it("no descuenta vidas al acertar", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("A");
     expect(juego.vidas()).toBe(6);
-  });
-
-  it("es case-insensitive al adivinar", () => {
-    const juego = new Ahorcado("GATO");
-    juego.adivinar("a");
-    expect(juego.palabraEnmascarada()).toBe("_ A _ _");
   });
 
   it("revela todas las ocurrencias de la letra acertada", () => {
@@ -40,12 +38,6 @@ describe("Ahorcado", () => {
     const juego = new Ahorcado("GATO");
     juego.adivinar("E");
     expect(juego.vidas()).toBe(5);
-  });
-
-  it("la palabra no cambia al fallar", () => {
-    const juego = new Ahorcado("GATO");
-    juego.adivinar("E");
-    expect(juego.palabraEnmascarada()).toBe("_ _ _ _");
   });
 
   it("fallo y acierto combinados", () => {
