@@ -33,7 +33,7 @@ function createHangman(): {
   const parteEls: Record<string, HTMLElement> = {};
   for (const parte of PARTES) {
     const el = document.createElement("div");
-    el.setAttribute("data-testid", parte);
+    el.dataset.testid = parte;
     el.className = `hangman__part hangman__part--${parte}`;
     el.style.display = "none";
     parteEls[parte] = el;
@@ -61,7 +61,7 @@ export function mountApp(
 
   const menu = document.createElement("div");
   menu.className = "menu";
-  menu.setAttribute("data-testid", "menu-inicio");
+  menu.dataset.testid = "menu-inicio";
 
   const titulo = document.createElement("h2");
   titulo.className = "menu__title";
@@ -92,7 +92,7 @@ export function mountApp(
 
     const customInput = document.createElement("input");
     customInput.setAttribute("type", "text");
-    customInput.setAttribute("data-testid", "custom-word-input");
+    customInput.dataset.testid = "custom-word-input";
     customInput.className = "input";
     customInput.placeholder = "Escribí tu palabra";
     customInput.addEventListener("input", () => {
@@ -110,7 +110,7 @@ export function mountApp(
     });
 
     const customBtn = document.createElement("button");
-    customBtn.setAttribute("data-testid", "custom-word-btn");
+    customBtn.dataset.testid = "custom-word-btn";
     customBtn.className = "btn btn--primary";
     customBtn.textContent = "Jugar";
 
@@ -140,7 +140,7 @@ export function mountApp(
 
   const livesEl = document.createElement("div");
   livesEl.className = "lives";
-  livesEl.setAttribute("data-testid", "lives");
+  livesEl.dataset.testid = "lives";
   leftCol.appendChild(livesEl);
 
   const { container: hangmanContainer, parteEls } = createHangman();
@@ -148,12 +148,12 @@ export function mountApp(
 
   const wordEl = document.createElement("div");
   wordEl.className = "word";
-  wordEl.setAttribute("data-testid", "word");
+  wordEl.dataset.testid = "word";
   leftCol.appendChild(wordEl);
 
   const messageEl = document.createElement("div");
   messageEl.className = "message";
-  messageEl.setAttribute("data-testid", "message");
+  messageEl.dataset.testid = "message";
   leftCol.appendChild(messageEl);
 
   columns.appendChild(leftCol);
@@ -166,7 +166,7 @@ export function mountApp(
 
   const input = document.createElement("input");
   input.setAttribute("type", "text");
-  input.setAttribute("data-testid", "letter-input");
+  input.dataset.testid = "letter-input";
   input.className = "input letter-input";
   input.maxLength = 1;
   input.placeholder = "A";
@@ -184,13 +184,13 @@ export function mountApp(
   wordRow.className = "input-row";
 
   const wordInput = document.createElement("input");
-  wordInput.setAttribute("data-testid", "word-guess");
+  wordInput.dataset.testid = "word-guess";
   wordInput.className = "input word-guess";
   wordInput.maxLength = 20;
   wordInput.placeholder = "Adivinar palabra";
 
   const guessBtn = document.createElement("button");
-  guessBtn.setAttribute("data-testid", "guess-btn");
+  guessBtn.dataset.testid = "guess-btn";
   guessBtn.className = "btn guess-btn";
   guessBtn.textContent = "Adivinar";
 
@@ -211,7 +211,7 @@ export function mountApp(
   rightCol.appendChild(wordRow);
 
   const restartBtn = document.createElement("button");
-  restartBtn.setAttribute("data-testid", "restart");
+  restartBtn.dataset.testid = "restart";
   restartBtn.className = "btn restart-btn";
   restartBtn.textContent = "Jugar de Nuevo";
   restartBtn.addEventListener("click", () => {
