@@ -35,7 +35,7 @@ export class Ahorcado {
       this.palabra = normalizar(palabra);
       if (esPalabraPersonalizada) this.cerrarMenu();
     } else {
-      const numeroAleatorio = Math.floor(Math.random() * 10);
+      const numeroAleatorio = Math.floor(Math.random() * Ahorcado.palabrasDisponibles.length);
       this.palabra = Ahorcado.palabrasDisponibles[numeroAleatorio];
       this.cerrarMenu();
     }
