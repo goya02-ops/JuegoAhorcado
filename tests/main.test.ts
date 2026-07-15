@@ -207,3 +207,107 @@ describe("mountApp - perder", () => {
     expect(input.disabled).toBe(true);
   });
 });
+
+describe("mountApp - adivinar palabra", () => {
+  it("al escribir la palabra y hacer clic en Adivinar gana la partida", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const wordInput = container.querySelector('[data-testid="word-guess"]') as HTMLInputElement;
+    const guessBtn = container.querySelector('[data-testid="guess-btn"]') as HTMLButtonElement;
+    const messageEl = container.querySelector('[data-testid="message"]');
+
+    wordInput.value = "GATO";
+    guessBtn.click();
+
+    expect(messageEl?.textContent).toBe("Ganaste");
+    expect(wordInput.value).toBe("");
+  });
+
+  it("al escribir la palabra y presionar Enter en el input de palabra gana", () => {
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const wordInput = container.querySelector('[data-testid="word-guess"]') as HTMLInputElement;
+    const messageEl = container.querySelector('[data-testid="message"]');
+
+    wordInput.value = "GATO";
+    wordInput.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
+
+    expect(messageEl?.textContent).toBe("Ganaste");
+    expect(wordInput.value).toBe("");
+  });
+});
+
+describe("mountApp - sin menú", () => {
+  it("con mostrarMenu false, el overlay no se muestra", () => {
+    document.body.innerHTML = "";
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego, { mostrarMenu: false });
+
+    const overlay = document.querySelector(".overlay") as HTMLElement;
+
+    expect(overlay.style.display).toBe("none");
+  });
+});
+
+describe("mountApp - menú", () => {
+  it("al hacer clic en Jugar Aleatoria inicia un juego con palabra aleatoria", () => {
+    document.body.innerHTML = "";
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const btnRandom = document.querySelector(".btn--primary") as HTMLButtonElement;
+    const overlay = document.querySelector(".overlay") as HTMLElement;
+    const wordEl = container.querySelector('[data-testid="word"]') as HTMLElement;
+
+    expect(overlay.style.display).not.toBe("none");
+
+    btnRandom.click();
+
+    expect(overlay.style.display).toBe("none");
+    expect(wordEl.textContent).toMatch(/^[_A-Z ]+$/);
+    expect(wordEl.textContent).toContain("_");
+  });
+
+  it("al jugar con palabra personalizada, inicia juego con esa palabra", () => {
+    document.body.innerHTML = "";
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const btnSecondary = document.querySelector(".btn--secondary") as HTMLButtonElement;
+    btnSecondary.click();
+
+    const customInput = document.querySelector('[data-testid="custom-word-input"]') as HTMLInputElement;
+    const customBtn = document.querySelector('[data-testid="custom-word-btn"]') as HTMLButtonElement;
+    expect(customInput).not.toBeNull();
+    expect(customBtn).not.toBeNull();
+
+    customInput.value = "PERRO";
+    customBtn.click();
+
+    const wordEl = container.querySelector('[data-testid="word"]') as HTMLElement;
+    expect(wordEl.textContent).toBe("_ _ _ _ _");
+  });
+
+  it("el input de palabra personalizada filtra caracteres no validos", () => {
+    document.body.innerHTML = "";
+    const juego = new Ahorcado("GATO");
+    const container = document.createElement("div");
+    mountApp(container, juego);
+
+    const btnSecondary = document.querySelector(".btn--secondary") as HTMLButtonElement;
+    btnSecondary.click();
+
+    const customInput = document.querySelector('[data-testid="custom-word-input"]') as HTMLInputElement;
+    customInput.value = "h0l4!";
+    customInput.dispatchEvent(new Event("input"));
+
+    expect(customInput.value).toBe("HL");
+  });
+});
