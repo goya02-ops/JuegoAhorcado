@@ -120,12 +120,15 @@ export class Ahorcado {
       this.vidasRestantes = 0;
     }
   }
+
   tenesMenuAbierto(): boolean {
     return this.menuAbierto;
   }
+
   getPalabra(): string {
     return this.palabra;
   }
+
   cerrarMenu(): void {
     this.menuAbierto = false;
   }
