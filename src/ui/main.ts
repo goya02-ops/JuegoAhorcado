@@ -93,7 +93,7 @@ export function mountApp(
     subtitulo.style.display = "none";
 
     const customInput = document.createElement("input");
-    customInput.setAttribute("type", "text");
+    customInput.type = "text";
     customInput.dataset.testid = "custom-word-input";
     customInput.className = "input";
     customInput.placeholder = "Escribí tu palabra";
@@ -167,7 +167,7 @@ export function mountApp(
   letterRow.className = "input-row";
 
   const input = document.createElement("input");
-  input.setAttribute("type", "text");
+  input.type = "text";
   input.dataset.testid = "letter-input";
   input.className = "input letter-input";
   input.maxLength = 1;
